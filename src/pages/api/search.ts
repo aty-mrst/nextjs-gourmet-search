@@ -11,11 +11,15 @@ export default async function handler(
   const place = PLACE.YUDA;
   const genre = req.query.genre;
 
+  console.log(`${apiUrl}&key=${apiKey}${place}&genre=${genre}&count=30`);
+
   try {
     const shopLists = await axios.get(
       `${apiUrl}&key=${apiKey}${place}&genre=${genre}&count=30`
     );
     const shopList = shopLists.data.results;
+
+    console.log(shopList);
 
     res.status(200).json(shopList);
   } catch (err) {
