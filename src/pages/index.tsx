@@ -1,7 +1,7 @@
 import { Footer } from "@/components/Footer";
 import GenreButton from "@/components/GenreButton";
 import { Header } from "@/components/Header";
-import { GENRE, GENRES } from "@/data/place";
+import { GENRES } from "@/data/place";
 import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
@@ -45,7 +45,7 @@ export default function Home() {
             <p>ジャンルを選択してください</p>
           )}
           <ul>
-            {shopData.map((shop) => (
+            {shopData.map((shop: any) => (
               <li key={shop.id} className="my-5">
                 <a
                   href={shop.urls.pc}
