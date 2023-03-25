@@ -31,6 +31,7 @@ export default function Home() {
         <aside className="w-[220px] max-w-[25%]">
           {GENRES.map((genre) => (
             <GenreButton
+              key={genre.NAME}
               genreName={genre.NAME}
               onClick={() => getPlaceShop(genre.NUM)}
             />
