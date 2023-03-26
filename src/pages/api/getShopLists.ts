@@ -12,7 +12,7 @@ export default async function handler(
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
   //表示件数
-  const apiCount = `&count=30`;
+  const apiCount = `&count=100`;
 
   //ジャンル
   let apiGenre = "";
