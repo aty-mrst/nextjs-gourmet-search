@@ -32,8 +32,8 @@ export default function Home() {
             <p>ジャンルを選択してください</p>
           )}
           <ul>
-            {shopData.map((shop) => (
-              <ShopItem shop={shop} />
+            {shopData.map((shop: any) => (
+              <ShopItem key={shop.id} shop={shop} />
             ))}
           </ul>
         </main>
