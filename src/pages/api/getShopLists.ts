@@ -1,4 +1,4 @@
-import { PLACE } from "@/data/place";
+import { PLACE } from "@/data/data";
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -21,23 +21,14 @@ export default async function handler(
   }
 
   //地域
-  let apiPlace = req.query.place;
-  switch (apiPlace) {
-    case "all":
-      apiPlace = PLACE.ALL;
-      break;
-    case "yudaonsen":
-      apiPlace = PLACE.YUDA;
-      break;
-    case "hofu":
-      apiPlace = PLACE.HOFU;
-      break;
-    case "iwakuni":
-      apiPlace = PLACE.IWAKUNI;
-      break;
-    default:
-      res.status(500).json("この地域のデータはありません");
-  }
+  const placeObj = PLACE.find((elem) => {
+    if (req.query.place) {
+      return elem.KEY === req.query.place;
+    } else {
+      return elem.KEY === "all";
+    }
+  });
+  const apiPlace = placeObj && placeObj.POSITION;
 
   //検索
   let apiKeyword = "";
@@ -47,7 +38,7 @@ export default async function handler(
 
   try {
     const resData = await axios.get(
-      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}`
+      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}&range=5`
     );
     const shopLists = resData.data.results;
 
