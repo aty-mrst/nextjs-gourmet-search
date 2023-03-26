@@ -10,9 +10,9 @@ export const ShopItem = ({ shop }: ShopItemType) => {
       <a
         href={shop.urls.pc}
         target="_blank"
-        className="flex justify-between px-5 py-8 bg-[#f7f3e1] border hover:border"
+        className="block px-5 py-8 bg-[#f7f3e1] border hover:border lg:flex justify-between"
       >
-        <div className="w-[200px] h-[200px] relative">
+        <div className="w-[200px] h-[200px] relative m-auto">
           <Image
             fill
             src={shop.photo.pc.l}
@@ -21,7 +21,7 @@ export const ShopItem = ({ shop }: ShopItemType) => {
           />
         </div>
 
-        <div className="w-[calc(100%-220px)]">
+        <div className="lg:w-[calc(100%-220px)]">
           <span className="text-xs block">{shop.genre.catch}</span>
           <h2 className="text-xl border-b inline-block">{shop.name}</h2>
           <span className="block text-sm">{shop.budget.average}</span>
