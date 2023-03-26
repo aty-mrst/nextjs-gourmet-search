@@ -1,5 +1,8 @@
 export const PLACE = {
+  ALL: "&service_area=SA75",
   YUDA: "&lat=34.16497682781039&lng=131.4571897371615",
+  HOFU: "&lat=34.054470150656854&lng=131.56869995888923",
+  IWAKUNI: "&lat=34.17057635622233&lng=132.220462531636",
 };
 
 export const GENRES = [

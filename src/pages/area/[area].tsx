@@ -3,15 +3,20 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
 
+  const router = useRouter();
+  const { area } = router.query;
+
   useEffect(() => {
     setShopData([]);
-  }, []);
+    setSearchNum(null);
+  }, [router]);
 
   return (
     <>
@@ -21,7 +26,7 @@ export default function Home() {
         <Sidebar
           setSearchNum={setSearchNum}
           setShopData={setShopData}
-          area={"all"}
+          area={area}
         />
         <main className="px-5 w-[calc(100%-220px)]">
           {searchNum ? (
