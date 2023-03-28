@@ -9,6 +9,7 @@ type SidebarType = {
   area: string | string[] | undefined;
   sideIn: string | null;
   setSideIn: any;
+  setGenreName: any;
 };
 
 export const Sidebar = ({
@@ -17,32 +18,15 @@ export const Sidebar = ({
   area,
   sideIn,
   setSideIn,
+  setGenreName,
 }: SidebarType) => {
   const [inputWord, setInputWord] = useState("");
-
-  useEffect(() => {
-    setShopData([]);
-
-    const firstGetShop = async () => {
-      try {
-        const res = await axios.get("/api/getShopLists", {
-          params: {
-            place: area,
-          },
-        });
-        setSearchNum(res.data.results_available);
-        setShopData(res.data.shop);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    firstGetShop();
-  }, [area]);
-
   /**
    * ジャンル別 店舗リストを取得
    */
-  const getPlaceShop = async (genre: string) => {
+  const getPlaceShop = async (e: any, genre: string) => {
+    setShopData([]);
+    setGenreName(e.currentTarget.dataset.name);
     try {
       setSideIn(null);
       const res = await axios.get("/api/getShopLists", {
@@ -53,6 +37,7 @@ export const Sidebar = ({
       });
       setSearchNum(res.data.results_available);
       setShopData(res.data.shop);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       console.log(err);
     }
@@ -70,6 +55,7 @@ export const Sidebar = ({
    */
   const searchWord = async (e: any, inputWord: string) => {
     e.preventDefault();
+    setGenreName(`「${inputWord}」で検索結果`);
     setSideIn(null);
 
     try {
@@ -106,7 +92,7 @@ export const Sidebar = ({
           <GenreButton
             key={genre.NAME}
             genreName={genre.NAME}
-            onClick={() => getPlaceShop(genre.NUM)}
+            onClick={(e) => getPlaceShop(e, genre.NUM)}
           />
         ))}
       </div>

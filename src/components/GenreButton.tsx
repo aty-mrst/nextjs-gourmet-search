@@ -2,14 +2,15 @@ import axios from "axios";
 
 type GenreButtonType = {
   genreName: string;
-  onClick: () => void;
+  onClick: (e: any) => void;
 };
 
 const GenreButton = ({ genreName, onClick }: GenreButtonType) => {
   return (
     <button
-      onClick={() => onClick()}
+      onClick={(e) => onClick(e)}
       className="w-[100%] block py-3 text-sm border-b first-of-type:border-t"
+      data-name={genreName}
     >
       {genreName}
     </button>

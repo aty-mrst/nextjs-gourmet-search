@@ -37,6 +37,9 @@ export default async function handler(
   }
 
   try {
+    console.log(
+      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}&range=5`
+    );
     const resData = await axios.get(
       `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}&range=5`
     );

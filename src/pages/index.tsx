@@ -6,15 +6,12 @@ import { LayoutWrap } from "@/components/LayoutWrap";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
-
-  // useEffect(() => {
-  //   setShopData([]);
-  // }, []);
+  const [genreName, setGenreName] = useState("全てのジャンル");
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -28,7 +25,13 @@ export default function Home() {
 
   return (
     <>
-      <Header />
+      <Header
+        setSideIn={setSideIn}
+        area={"all"}
+        setGenreName={setGenreName}
+        setSearchNum={setSearchNum}
+        setShopData={setShopData}
+      />
 
       <LayoutWrap>
         <Sidebar
@@ -37,9 +40,10 @@ export default function Home() {
           area={"all"}
           sideIn={sideIn}
           setSideIn={setSideIn}
+          setGenreName={setGenreName}
         />
         <LayoutMain>
-          <TextArea searchNum={searchNum} />
+          <TextArea searchNum={searchNum} genreName={genreName} area={"all"} />
           <ul>
             {shopData.map((shop: any) => (
               <ShopItem key={shop.id} shop={shop} />
