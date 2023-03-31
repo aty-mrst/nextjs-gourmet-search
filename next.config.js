@@ -1,18 +1,15 @@
 /** @type {import('next').NextConfig} */
 
-const runtimeCaching = require("next-pwa/cache");
-const withPWA = require("next-pwa")({
-  dest: "public",
-  register: true,
-  scope: "/",
-  sw: "sw.js",
-  skipWaiting: true,
-  runtimeCaching,
-  buildExcludes: [/middleware-manifest.json$/],
-});
+const withPWA = require("next-pwa");
+const runtimeCaching = require("next-pwa/cache.js");
 
-module.exports = withPWA({
+const nextConfig = withPWA({
+  pwa: {
+    dest: "public",
+    runtimeCaching,
+  },
   reactStrictMode: true,
+  trailingSlash: true,
   images: {
     remotePatterns: [
       {
@@ -24,3 +21,5 @@ module.exports = withPWA({
     ],
   },
 });
+
+module.exports = nextConfig;
