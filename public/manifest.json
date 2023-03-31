@@ -1,21 +1,12 @@
 {
-  "theme_color": "#f69435",
-  "background_color": "#f69435",
-  "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
-  "name": "gourmet_search",
-  "short_name": "gourmet",
+  "name": "PWA App",
+  "short_name": "App",
   "icons": [
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-256x256.png",
-      "sizes": "256x256",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/icon-384x384.png",
@@ -27,5 +18,10 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
 }
