@@ -21,7 +21,8 @@
   ],
   "theme_color": "#FFFFFF",
   "background_color": "#FFFFFF",
-  "start_url": "/",
+  "start_url": "https://gourmet-search-tau.vercel.app/",
+  "scope": "https://gourmet-search-tau.vercel.app/",
   "display": "standalone",
   "orientation": "portrait"
 }
