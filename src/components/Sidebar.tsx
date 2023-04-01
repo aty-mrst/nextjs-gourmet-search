@@ -62,6 +62,7 @@ export const Sidebar = ({
       const res = await axios.get("/api/getShopLists", {
         params: {
           keyword: inputWord,
+          place: area,
         },
       });
       setSearchNum(res.data.results_available);
@@ -75,26 +76,34 @@ export const Sidebar = ({
 
   return (
     <aside
-      className={`w-[100%] h-[100vh] bg-white z-10 lg:w-[220px] lg:max-w-[25%] left-[-100%] top-[90px] fixed maxlg:overflow-scroll lg:h-[auto] lg:block lg:static transition-all ease-in-out duration-300 ${sideIn}`}
+      className={`w-[100%] h-[100vh] bg-white z-10 lg:w-[220px] lg:max-w-[25%] left-[-100%] maxlg:top-[30px] maxlg:pt-[105px] fixed maxlg:overflow-scroll lg:h-[auto] lg:block lg:static transition-all ease-in-out duration-300 ${sideIn}`}
     >
-      <div className="">
+      <div className="px-1 maxlg:px-3">
         <form id="searchForm" onSubmit={(e) => searchWord(e, inputWord)}>
           <input
             type="text"
             placeholder="キーワードを入力"
             value={inputWord}
             onChange={onChangeText}
+            className="border border-[#F8E6CC] h-10 px-1 text-sm w-[75%]"
           />
-          <button type="submit">検索</button>
+          <button
+            type="submit"
+            className="bg-[#017D01] text-[#fff] h-10 text-sm w-[25%]"
+          >
+            検索
+          </button>
         </form>
 
-        {GENRES.map((genre) => (
-          <GenreButton
-            key={genre.NAME}
-            genreName={genre.NAME}
-            onClick={(e) => getPlaceShop(e, genre.NUM)}
-          />
-        ))}
+        <div className="mt-3">
+          {GENRES.map((genre) => (
+            <GenreButton
+              key={genre.NAME}
+              genreName={genre.NAME}
+              onClick={(e) => getPlaceShop(e, genre.NUM)}
+            />
+          ))}
+        </div>
       </div>
     </aside>
   );
