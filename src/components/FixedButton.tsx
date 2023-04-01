@@ -11,7 +11,7 @@ const FixedButton = ({ onClick }: FixedButtonType) => {
     <>
       {/* sp */}
       <button
-        className="fixed right-[15px] bottom-[15px] border rounded-[50%] w-[80px] h-[80px] inline-block text-sm lg:hidden z-30 bg-white"
+        className="fixed right-[10px] bottom-[10px] border-2 rounded-[50%] w-[80px] h-[80px] inline-block text-xs lg:hidden z-30 bg-[#017D01] text-[#fff] border-[#fff]"
         onClick={onClick}
       >
         ジャンルを
@@ -21,7 +21,7 @@ const FixedButton = ({ onClick }: FixedButtonType) => {
 
       {/* pc */}
       <button
-        className="hidden lg:inline-block fixed right-[15px] bottom-[15px] border rounded-[50%] w-[80px] h-[80px] text-sm z-30 bg-white"
+        className="hidden lg:inline-block fixed right-[15px] bottom-[15px] border-2 rounded-[50%] w-[80px] h-[80px] text-xs z-30 bg-[#017D01] text-[#fff] border-[#fff]"
         onClick={scrollTo}
       >
         ページ

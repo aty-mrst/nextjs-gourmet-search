@@ -44,17 +44,19 @@ export const Header = ({
   };
 
   return (
-    <header className="text-center py-5 border-b fixed w-[100%] top-0 bg-white z-20">
-      <h1 className="inline-block text-xl">
-        <Link href={"/"}>〜山口県 グルメガイド〜</Link>
+    <header className="text-center border-b border-[#F8E6CC] fixed w-[100%] top-0 bg-white z-20">
+      <h1 className="inline-block py-3">
+        <Link href={"/"} className="text-xl font-bold">
+          <span className="text-[#017D01] text-2xl">山口県</span>グルメガイド
+        </Link>
       </h1>
 
-      <div className="whitespace-nowrap overflow-x-scroll">
+      <div className="whitespace-nowrap overflow-x-scroll bg-[#FEF6E8] py-3">
         {PLACE.map((place) => (
           <Link
             key={place.NAME}
             href={place.URL}
-            className="mx-3"
+            className="px-5 border-r-2 border-[#017D01] ease-in duration-150 hover:text-[#017D01]"
             onClick={handleArea}
           >
             {place.NAME}

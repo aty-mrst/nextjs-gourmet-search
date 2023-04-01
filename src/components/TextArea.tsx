@@ -15,14 +15,22 @@ export const TextArea = ({ searchNum, genreName, area }: TextAreaType) => {
 
   return (
     <>
-      <p>エリア名: {areaName}</p>
-      <p>ジャンル: {genreName}</p>
+      <p className="border-l-4 border-[#017D01] pl-2 mb-1">現在の選択条件</p>
+      <p className="text-sm">
+        エリア <span className="font-bold text-lg ml-1">{areaName}</span>
+      </p>
+      <p className="text-sm">
+        ジャンル <span className="font-bold text-lg ml-1">{genreName}</span>
+      </p>
       {searchNum ? (
-        <p>
-          <span>{searchNum}</span>件のお店が見つかりました！
+        <p className="mt-3 text-sm">
+          <span className="inline-block font-bold text-xl mr-1">
+            {searchNum}
+          </span>
+          件のお店が見つかりました！
         </p>
       ) : (
-        <p>ジャンルを選択してください</p>
+        <p className="mt-3 text-sm">条件に合うお店が見つかりませんでした。。</p>
       )}
     </>
   );

@@ -6,7 +6,7 @@ type LayoutWrapType = {
 
 export const LayoutWrap = ({ children }: LayoutWrapType) => {
   return (
-    <div className="flex justify-center max-w-[1200px] mx-auto mt-[120px]">
+    <div className="flex justify-between max-w-[1200px] mx-auto mt-[140px]">
       {children}
     </div>
   );
