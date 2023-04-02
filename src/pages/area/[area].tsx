@@ -6,17 +6,21 @@ import { LayoutWrap } from "@/components/LayoutWrap";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import axios from "axios";
+import { GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
 
-export default function Home() {
+type HomeType = {
+  pageNum: number | undefined;
+  area: string | undefined;
+  resolvedUrl: string | undefined;
+};
+
+export default function Home({ pageNum, area, resolvedUrl }: HomeType) {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
   const [areaName, setAreaName] = useState("");
-
-  const router = useRouter();
-  const { area } = router.query;
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -28,15 +32,30 @@ export default function Home() {
     }
   };
 
+  const firstGetShop = async () => {
+    try {
+      const res = await axios.get("/api/getShopLists", {
+        params: {
+          place: area,
+          startNum: pageNum,
+        },
+      });
+      setSearchNum(res.data.results_available);
+      setShopData(res.data.shop);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    setShopData([]);
+    setSearchNum(null);
+    setGenreName("全てのジャンル");
+    firstGetShop();
+  }, [area]);
+
   return (
     <>
-      <Header
-        setSideIn={setSideIn}
-        area={area}
-        setGenreName={setGenreName}
-        setSearchNum={setSearchNum}
-        setShopData={setShopData}
-      />
+      <Header />
 
       <LayoutWrap>
         <Sidebar
@@ -46,8 +65,9 @@ export default function Home() {
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
+          resolvedUrl={resolvedUrl}
         />
-        <LayoutMain>
+        <LayoutMain shopData={shopData}>
           <TextArea searchNum={searchNum} genreName={genreName} area={area} />
           <ul>
             {shopData.map((shop: any) => (
@@ -63,3 +83,21 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  let { page } = context.query;
+  let area = context.params?.area;
+
+  const resolvedUrl = context.resolvedUrl;
+  console.log(context);
+
+  if (!page || page === "0") page = "1";
+
+  return {
+    props: {
+      pageNum: page,
+      area: area,
+      resolvedUrl: `${area}`,
+    },
+  };
+};

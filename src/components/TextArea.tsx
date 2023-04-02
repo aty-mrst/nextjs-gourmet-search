@@ -22,15 +22,20 @@ export const TextArea = ({ searchNum, genreName, area }: TextAreaType) => {
       <p className="text-sm">
         ジャンル <span className="font-bold text-lg ml-1">{genreName}</span>
       </p>
-      {searchNum ? (
+
+      {!searchNum ? (
+        <p className="mt-3 text-sm">
+          お店を探しています・・・
+          <br />
+          しばらくしても表示されない場合は店舗がないため、他のジャンルをお調べください。
+        </p>
+      ) : (
         <p className="mt-3 text-sm">
           <span className="inline-block font-bold text-xl mr-1">
             {searchNum}
           </span>
           件のお店が見つかりました！
         </p>
-      ) : (
-        <p className="mt-3 text-sm">条件に合うお店が見つかりませんでした。。</p>
       )}
     </>
   );

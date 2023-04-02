@@ -5,10 +5,9 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta httpEquiv="content-language" content="ja" />
-        <meta name="msapplication-TileColor" content="#ffad1a" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#017D01" />
         <meta name="application-name" content="gourmet-search" />
-        <meta name="description" content="グルメ検索アプリだよ！！！！！！" />
+        <meta name="description" content="山口県の飲食店が検索できます" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" sizes="192x192" href="/icon-192x192.png" />
         <link rel="icon" href="/favicon.ico" />

@@ -5,8 +5,6 @@ type ShopItemType = {
 };
 
 export const ShopItem = ({ shop }: ShopItemType) => {
-  console.log(shop);
-
   return (
     <li key={shop.id} className="my-5 relative">
       <a
