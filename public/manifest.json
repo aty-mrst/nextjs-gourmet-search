@@ -1,6 +1,6 @@
 {
-  "name": "PWA App",
-  "short_name": "App",
+  "name": "山口県グルメガイド",
+  "short_name": "山口県グルメガイド",
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -18,5 +18,5 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "description": "グルメ検索アプリです"
+  "description": "山口県の飲食店が検索できます"
 }
