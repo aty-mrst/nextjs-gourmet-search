@@ -31,6 +31,9 @@ export default function Home({ pageNum, resolvedUrl }: HomeType) {
   };
 
   const firstGetShop = async () => {
+    setShopData([]);
+    setSearchNum(null);
+    setGenreName("全てのジャンル");
     try {
       const res = await axios.get("/api/getShopLists", {
         params: {
@@ -46,15 +49,12 @@ export default function Home({ pageNum, resolvedUrl }: HomeType) {
   };
 
   useEffect(() => {
-    setShopData([]);
-    setSearchNum(null);
-    setGenreName("全てのジャンル");
     firstGetShop();
   }, [resolvedUrl]);
 
   return (
     <>
-      <Header />
+      <Header onClick={firstGetShop} />
 
       <LayoutWrap>
         <Sidebar

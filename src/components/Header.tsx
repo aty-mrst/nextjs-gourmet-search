@@ -1,11 +1,15 @@
 import { PLACE } from "@/data/data";
 import Link from "next/link";
 
-export const Header = () => {
+type HeaderType = {
+  onClick: () => void;
+};
+
+export const Header = ({ onClick }: HeaderType) => {
   return (
     <header className="text-center border-b border-[#F8E6CC] fixed w-[100%] top-0 bg-white z-20">
       <h1 className="inline-block py-3">
-        <Link href={"/"} className="text-xl font-bold">
+        <Link href={"/"} className="text-xl font-bold" onClick={onClick}>
           <span className="text-[#017D01] text-2xl">山口県</span>グルメガイド
         </Link>
       </h1>
@@ -16,6 +20,7 @@ export const Header = () => {
             key={place.NAME}
             href={place.URL}
             className="px-5 border-r-2 border-[#017D01] ease-in duration-150 hover:text-[#017D01]"
+            onClick={onClick}
           >
             {place.NAME}
           </Link>
