@@ -68,9 +68,9 @@ export default function Home({ pageNum, resolvedUrl }: HomeType) {
         />
         <LayoutMain
           shopData={shopData}
-          setSearchNum={setSearchNum}
-          setShopData={setShopData}
-          pageNum={pageNum}
+          // setSearchNum={setSearchNum}
+          // setShopData={setShopData}
+          // pageNum={pageNum}
         >
           <TextArea searchNum={searchNum} genreName={genreName} area={"all"} />
           <ul>

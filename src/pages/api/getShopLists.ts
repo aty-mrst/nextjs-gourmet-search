@@ -12,7 +12,14 @@ export default async function handler(
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
   //表示件数
-  const apiCount = `&count=100`;
+  const SHOW_NUM = 10;
+  const apiCount = `&count=${SHOW_NUM}`;
+
+  //何件目から取得するか
+  let apiNum = "&start=1";
+  if (req.query.startNum) {
+    apiNum = `&start=${req.query.startNum}`;
+  }
 
   //ジャンル
   let apiGenre = "";
@@ -37,11 +44,8 @@ export default async function handler(
   }
 
   try {
-    console.log(
-      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}&range=5`
-    );
     const resData = await axios.get(
-      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}&range=5`
+      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=5`
     );
     const shopLists = resData.data.results;
 

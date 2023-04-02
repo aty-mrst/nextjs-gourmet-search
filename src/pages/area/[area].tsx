@@ -13,10 +13,10 @@ import { useEffect, useState } from "react";
 type HomeType = {
   pageNum: number | undefined;
   area: string | undefined;
-  resolvedUrl: string | undefined;
+  // resolvedUrl: string | undefined;
 };
 
-export default function Home({ pageNum, area, resolvedUrl }: HomeType) {
+export default function Home({ pageNum, area }: HomeType) {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
@@ -65,7 +65,7 @@ export default function Home({ pageNum, area, resolvedUrl }: HomeType) {
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
-          resolvedUrl={resolvedUrl}
+          resolvedUrl={"resolvedUrl"}
         />
         <LayoutMain shopData={shopData}>
           <TextArea searchNum={searchNum} genreName={genreName} area={area} />
@@ -88,7 +88,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   let { page } = context.query;
   let area = context.params?.area;
 
-  const resolvedUrl = context.resolvedUrl;
+  // const resolvedUrl = context.resolvedUrl;
   console.log(context);
 
   if (!page || page === "0") page = "1";
@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       pageNum: page,
       area: area,
-      resolvedUrl: `${area}`,
+      // resolvedUrl: `${area}`,
     },
   };
 };

@@ -10,6 +10,7 @@ type SidebarType = {
   sideIn: string | null;
   setSideIn: any;
   setGenreName: any;
+  resolvedUrl: string | undefined;
 };
 
 export const Sidebar = ({
@@ -19,6 +20,7 @@ export const Sidebar = ({
   sideIn,
   setSideIn,
   setGenreName,
+  resolvedUrl,
 }: SidebarType) => {
   const [inputWord, setInputWord] = useState("");
   /**
@@ -26,6 +28,7 @@ export const Sidebar = ({
    */
   const getPlaceShop = async (e: any, genre: string) => {
     setShopData([]);
+    setSearchNum(null);
     setGenreName(e.currentTarget.dataset.name);
     try {
       setSideIn(null);
@@ -101,6 +104,7 @@ export const Sidebar = ({
               key={genre.NAME}
               genreName={genre.NAME}
               onClick={(e) => getPlaceShop(e, genre.NUM)}
+              resolvedUrl={resolvedUrl}
             />
           ))}
         </div>
