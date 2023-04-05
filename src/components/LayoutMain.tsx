@@ -6,12 +6,13 @@ type LayoutMainType = {
   shopData: any;
   // setSearchNum: any;
   // setShopData: any;
-  // pageNum: string | undefined;
+  currentPage: number;
 };
 
 export const LayoutMain = ({
   children,
   shopData,
+  currentPage,
 }: // setSearchNum,
 // setShopData,
 // pageNum,
@@ -23,7 +24,7 @@ LayoutMainType) => {
         <Pagination
           // setSearchNum={setSearchNum}
           // setShopData={setShopData}
-          // pageNum={pageNum}
+          currentPage={currentPage}
         />
       ) : (
         <></>

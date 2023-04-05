@@ -15,11 +15,14 @@ export default async function handler(
   const SHOW_NUM = 10;
   const apiCount = `&count=${SHOW_NUM}`;
 
-  //何件目から取得するか
+  //何件目から取得するかs
   let apiNum = "&start=1";
   if (req.query.startNum) {
-    apiNum = `&start=${req.query.startNum}`;
+    const resNum: any = req.query.startNum;
+    const num = resNum * 10 - 9;
+    apiNum = `&start=${num}`;
   }
+  console.log("何晩目の投稿ですか？", apiNum);
 
   //ジャンル
   let apiGenre = "";

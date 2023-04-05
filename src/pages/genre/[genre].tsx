@@ -6,21 +6,21 @@ import { LayoutWrap } from "@/components/LayoutWrap";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
+import { GENRES } from "@/data/data";
 import axios from "axios";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useEffect, useState } from "react";
 
 type HomeType = {
-  pageNum: number | undefined;
-  area: string | undefined;
-  // resolvedUrl: string | undefined;
+  pageNum: number;
+  genreNum: string;
+  genreItem: string;
 };
 
-export default function Home({ pageNum, area }: HomeType) {
+export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
-  const [areaName, setAreaName] = useState("");
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -35,23 +35,25 @@ export default function Home({ pageNum, area }: HomeType) {
   const firstGetShop = async () => {
     setShopData([]);
     setSearchNum(null);
-    setGenreName("全てのジャンル");
     try {
       const res = await axios.get("/api/getShopLists", {
         params: {
-          place: area,
-          startNum: pageNum,
+          place: "all",
+          genre: genreNum,
+          startNum: 1,
         },
       });
+      setGenreName(genreItem);
       setSearchNum(res.data.results_available);
       setShopData(res.data.shop);
     } catch (err) {
       console.log(err);
     }
   };
+
   useEffect(() => {
     firstGetShop();
-  }, [area]);
+  }, [genreNum]);
 
   return (
     <>
@@ -59,16 +61,21 @@ export default function Home({ pageNum, area }: HomeType) {
 
       <LayoutWrap>
         <Sidebar
+          area={"all"}
+          resolvedUrl={"/genre"}
           setSearchNum={setSearchNum}
           setShopData={setShopData}
-          area={area}
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
-          resolvedUrl={"resolvedUrl"}
         />
-        <LayoutMain shopData={shopData}>
-          <TextArea searchNum={searchNum} genreName={genreName} area={area} />
+        <LayoutMain
+          shopData={shopData}
+          // setSearchNum={setSearchNum}
+          // setShopData={setShopData}
+          currentNum={1}
+        >
+          <TextArea searchNum={searchNum} genreName={genreName} area={"all"} />
           <ul>
             {shopData.map((shop: any) => (
               <ShopItem key={shop.id} shop={shop} />
@@ -84,20 +91,24 @@ export default function Home({ pageNum, area }: HomeType) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let { page } = context.query;
-  let area = context.params?.area;
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [{ params: { genre: "" } }],
+    fallback: true,
+  };
+};
 
-  // const resolvedUrl = context.resolvedUrl;
-  console.log(context);
-
-  if (!page || page === "0") page = "1";
+export const getStaticProps: GetStaticProps = async (context) => {
+  const genreUrl = context.params?.genre;
+  const pickupGenre = GENRES.find((genre) => {
+    return genre.KEY === genreUrl;
+  });
+  //apiを叩く用のジャンル番号
+  const genreNum = pickupGenre && pickupGenre.NUM;
+  //画面表示用のジャンル名
+  const genreItem = pickupGenre && pickupGenre.NAME;
 
   return {
-    props: {
-      pageNum: page,
-      area: area,
-      // resolvedUrl: `${area}`,
-    },
+    props: { genreNum, genreItem },
   };
 };

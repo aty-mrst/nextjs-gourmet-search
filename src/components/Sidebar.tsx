@@ -105,6 +105,7 @@ export const Sidebar = ({
               genreName={genre.NAME}
               onClick={(e) => getPlaceShop(e, genre.NUM)}
               resolvedUrl={resolvedUrl}
+              genreUrl={genre.KEY}
             />
           ))}
         </div>
