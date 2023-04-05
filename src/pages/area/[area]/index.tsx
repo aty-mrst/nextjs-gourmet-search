@@ -7,16 +7,19 @@ import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
 import axios from "axios";
-import { useRouter } from "next/router";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+type HomeType = {
+  area: string | undefined;
+  pageNum: number | undefined;
+};
+
+export default function Home({ area, pageNum }: HomeType) {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
-
-  const router = useRouter();
-  const currentPage: any = router.query.page ? router.query.page : 1;
+  const [areaName, setAreaName] = useState("");
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -34,8 +37,8 @@ export default function Home() {
     try {
       const res = await axios.get("/api/getShopLists", {
         params: {
-          place: "all",
-          startNum: currentPage,
+          place: area,
+          startNum: 1,
         },
       });
       setGenreName("全てのジャンル");
@@ -45,14 +48,9 @@ export default function Home() {
       console.log(err);
     }
   };
-
   useEffect(() => {
     firstGetShop();
   }, []);
-
-  useEffect(() => {
-    firstGetShop();
-  }, [router.query]);
 
   return (
     <>
@@ -60,21 +58,16 @@ export default function Home() {
 
       <LayoutWrap>
         <Sidebar
-          area={"all"}
-          resolvedUrl={"/genre"}
+          area={area}
+          resolvedUrl={`/area/${area}/genre`}
           setSearchNum={setSearchNum}
           setShopData={setShopData}
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
         />
-        <LayoutMain
-          shopData={shopData}
-          // setSearchNum={setSearchNum}
-          // setShopData={setShopData}
-          currentPage={currentPage}
-        >
-          <TextArea searchNum={searchNum} genreName={genreName} area={"all"} />
+        <LayoutMain shopData={shopData} currentNum={1}>
+          <TextArea searchNum={searchNum} genreName={genreName} area={area} />
           <ul>
             {shopData.map((shop: any) => (
               <ShopItem key={shop.id} shop={shop} />
@@ -89,3 +82,20 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [{ params: { area: "" } }],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const area = context.params?.area;
+
+  return {
+    props: {
+      area,
+    },
+  };
+};

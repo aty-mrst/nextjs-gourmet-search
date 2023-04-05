@@ -9,13 +9,13 @@ import { useRouter } from "next/router";
 type PaginationType = {
   // setSearchNum: any;
   // setShopData: any;
-  // pageNum: string | undefined;
+  currentPage: number;
 };
 
 export const Pagination = ({
   // setSearchNum,
   // setShopData,
-  // pageNum,
+  currentPage,
 }: PaginationType) => {
   const router = useRouter();
   const { page } = router.query;
@@ -27,18 +27,17 @@ export const Pagination = ({
   }
 
   //currentNum
-  let currentNum = Number(page);
-  if (!page) {
-    currentNum = 1;
-  }
+  // let currentNum = Number(page);
+  // if (!page) {
+  //   currentNum = 1;
+  // }
 
   //prevNum
-  const prevNum = currentNum - 1;
-  const nextNum = currentNum + 1;
+  // const prevNum = currentNum - 1;
+  // const nextNum = currentNum + 1;
 
   const handlePrev = async () => {
     // router.push(`${pathname}?page=${prevNum}`);
-
     // const res = await axios.get("/api/getShopLists", {
     //   params: {
     //     startNum: pageNum,
@@ -50,7 +49,6 @@ export const Pagination = ({
 
   const handleNext = async () => {
     // router.push(`${pathname}?page=${nextNum}`);
-
     // const res = await axios.get("/api/getShopLists", {
     //   params: {
     //     startNum: pageNum,
@@ -61,23 +59,23 @@ export const Pagination = ({
   };
 
   return (
-    <div>
+    <section>
       【現在ページネーションの実装中・・・・】
-      {/* <ul>
-        {prevNum > 0 && (
+      <ul>
+        {/* {prevNum > 0 && (
           <li>
             <button onClick={handlePrev}>前へ</button>
           </li>
-        )}
+        )} */}
 
         <li>
-          <p>{currentNum}</p>
+          <span>{currentPage}</span>
         </li>
 
-        <li>
+        {/* <li>
           <button onClick={handleNext}>次へ</button>
-        </li>
-      </ul> */}
-    </div>
+        </li> */}
+      </ul>
+    </section>
   );
 };
