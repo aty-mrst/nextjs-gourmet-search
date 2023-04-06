@@ -66,7 +66,7 @@ export default function Home({ area, pageNum }: HomeType) {
           setSideIn={setSideIn}
           setGenreName={setGenreName}
         />
-        <LayoutMain shopData={shopData} currentNum={1}>
+        <LayoutMain shopData={shopData} currentPage={1}>
           <TextArea searchNum={searchNum} genreName={genreName} area={area} />
           <ul>
             {shopData.map((shop: any) => (
@@ -85,7 +85,8 @@ export default function Home({ area, pageNum }: HomeType) {
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
-    paths: [{ params: { area: "" } }],
+    // paths: [{ params: { area: "" } }],
+    paths: [],
     fallback: true,
   };
 };
