@@ -74,7 +74,7 @@ export default function Home({ area, pageNum, genreNum, genreItem }: HomeType) {
           shopData={shopData}
           // setSearchNum={setSearchNum}
           // setShopData={setShopData}
-          currentNum={1}
+          currentPage={1}
         >
           <TextArea searchNum={searchNum} genreName={genreName} area={area} />
           <ul>
@@ -94,7 +94,8 @@ export default function Home({ area, pageNum, genreNum, genreItem }: HomeType) {
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
-    paths: [{ params: { area: "", genre: "" } }],
+    // paths: [{ params: { area: "", genre: "" } }],
+    paths: [],
     fallback: true,
   };
 };
