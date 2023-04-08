@@ -22,7 +22,7 @@ export const Meta = ({ title, description }: MetaType) => {
       <meta property="og:description" content={metaDesc} />
       <meta
         property="og:image"
-        content={`${process.env.SITE_URL}/ogp_large.png`}
+        content={`${process.env.NEXT_PUBLIC_SITE_URL}/ogp_large.png`}
       />
       <meta name="twitter:card" content="summary_large_image" />
     </Head>
