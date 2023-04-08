@@ -21,28 +21,30 @@ export const ShopItem = ({ shop }: ShopItemType) => {
           />
         </div>
 
-        <div className="lg:w-[calc(100%-220px)]">
+        <div className="lg:w-[calc(100%-220px)] mt-4 lg:mt-0">
           <small className="text-xs block text-[#017D01]">
             {shop.genre.catch}
           </small>
-          <h2 className="text-xl inline-block font-bold">{shop.name}</h2>
-          <p className="block text-sm">[予算] {shop.budget.average}</p>
+          <h2 className="text-xl inline-block font-bold mt-1 mb-2">
+            {shop.name}
+          </h2>
+          <p className="block text-sm my-1">[予算] {shop.budget.average}</p>
           {shop.course === "あり" && <p className="text-sm">[コース]あり</p>}
-          <p className="text-sm">
+          <p className="text-sm my-1">
             <span className="">[アクセス]</span> {shop.mobile_access}
           </p>
-          <p className="text-sm">
+          <p className="text-sm my-1">
             <span className="">[駐車場]</span> {shop.parking}
           </p>
-          <p className="text-sm">
+          <p className="text-sm my-1">
             <span className="">[営業日時]</span> {shop.open}
           </p>
           {shop.card === "利用可" ? (
-            <p className="text-sm">[カード] 利用可能</p>
+            <p className="text-sm my-1">[カード] 利用可能</p>
           ) : (
-            <p className="text-sm">[カード] 不可</p>
+            <p className="text-sm my-1">[カード] 不可</p>
           )}
-          <p className="text-sm">
+          <p className="text-sm my-1">
             <span className="">[wifi]</span> {shop.wifi}
           </p>
 
