@@ -3,24 +3,33 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { LayoutWrap } from "@/components/LayoutWrap";
+import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
-import { GENRES } from "@/data/data";
+import { GENRES, REVALIDATE_TIME } from "@/data/data";
 import axios from "axios";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 type HomeType = {
-  pageNum: number;
   genreNum: string;
   genreItem: string;
 };
 
-export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
+export default function Home({ genreNum, genreItem }: HomeType) {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadAreaText, setLoadAreaText] = useState("お店を探しています・・・");
+  const [isPagination, setIsPagination] = useState(true);
+
+  const router = useRouter();
+  const { query, asPath } = router;
+  const currentPage = query.page || 1;
+  const urlWithoutQuery = asPath.split("?")[0];
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -33,6 +42,7 @@ export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
   };
 
   const firstGetShop = async () => {
+    setIsPagination(true);
     setShopData([]);
     setSearchNum(null);
     try {
@@ -40,12 +50,18 @@ export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
         params: {
           place: "all",
           genre: genreNum,
-          startNum: 1,
+          startNum: currentPage,
         },
       });
       setGenreName(genreItem);
-      setSearchNum(res.data.results_available);
       setShopData(res.data.shop);
+      setTotalPages(Math.ceil(res.data.results_available / 10));
+      await setSearchNum(res.data.results_available);
+      if (!res.data.results_available) {
+        setLoadAreaText("条件に一致するお店が見つかりませんでした。");
+      } else {
+        setLoadAreaText("お店を探しています・・・");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +69,8 @@ export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
 
   useEffect(() => {
     firstGetShop();
-  }, [genreNum]);
+    setSideIn(null);
+  }, [genreNum, router.query]);
 
   return (
     <>
@@ -68,19 +85,34 @@ export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
+          setIsPagination={setIsPagination}
         />
-        <LayoutMain
-          shopData={shopData}
-          // setSearchNum={setSearchNum}
-          // setShopData={setShopData}
-          currentPage={1}
-        >
-          <TextArea searchNum={searchNum} genreName={genreName} area={"all"} />
+        <LayoutMain>
+          {/* リードエリア */}
+          <TextArea
+            searchNum={searchNum}
+            genreName={genreName}
+            area={"all"}
+            loadAreaText={loadAreaText}
+          />
+
+          {/* 店舗リスト */}
           <ul>
             {shopData.map((shop: any) => (
               <ShopItem key={shop.id} shop={shop} />
             ))}
           </ul>
+
+          {/* ページネーション */}
+          {shopData.length && isPagination ? (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              path={urlWithoutQuery}
+            />
+          ) : (
+            ""
+          )}
         </LayoutMain>
       </LayoutWrap>
 
@@ -93,7 +125,6 @@ export default function Home({ pageNum, genreNum, genreItem }: HomeType) {
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
-    // paths: [{ params: { genre: "" } }],
     paths: [],
     fallback: true,
   };
@@ -111,5 +142,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: { genreNum, genreItem },
+    revalidate: REVALIDATE_TIME,
   };
 };

@@ -3,10 +3,13 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { LayoutWrap } from "@/components/LayoutWrap";
+import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
+import { REVALIDATE_TIME } from "@/data/data";
 import axios from "axios";
+import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -14,9 +17,14 @@ export default function Home() {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadAreaText, setLoadAreaText] = useState("お店を探しています・・・");
+  const [isPagination, setIsPagination] = useState(true);
 
   const router = useRouter();
-  const currentPage: any = router.query.page ? router.query.page : 1;
+  const { query, asPath } = router;
+  const currentPage = query.page || 1;
+  const urlWithoutQuery = asPath.split("?")[0];
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -29,6 +37,7 @@ export default function Home() {
   };
 
   const firstGetShop = async () => {
+    setIsPagination(true);
     setShopData([]);
     setSearchNum(null);
     try {
@@ -39,16 +48,18 @@ export default function Home() {
         },
       });
       setGenreName("全てのジャンル");
-      setSearchNum(res.data.results_available);
       setShopData(res.data.shop);
+      setTotalPages(Math.ceil(res.data.results_available / 10));
+      setSearchNum(res.data.results_available);
+      if (!res.data.results_available) {
+        setLoadAreaText("条件に一致するお店が見つかりませんでした。");
+      } else {
+        setLoadAreaText("お店を探しています・・・");
+      }
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    firstGetShop();
-  }, []);
 
   useEffect(() => {
     firstGetShop();
@@ -67,19 +78,34 @@ export default function Home() {
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
+          setIsPagination={setIsPagination}
         />
-        <LayoutMain
-          shopData={shopData}
-          // setSearchNum={setSearchNum}
-          // setShopData={setShopData}
-          currentPage={currentPage}
-        >
-          <TextArea searchNum={searchNum} genreName={genreName} area={"all"} />
+        <LayoutMain>
+          {/* リードエリア */}
+          <TextArea
+            searchNum={searchNum}
+            genreName={genreName}
+            area={"all"}
+            loadAreaText={loadAreaText}
+          />
+
+          {/* 店舗リスト */}
           <ul>
             {shopData.map((shop: any) => (
               <ShopItem key={shop.id} shop={shop} />
             ))}
           </ul>
+
+          {/* ページネーション */}
+          {shopData.length && isPagination ? (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              path={urlWithoutQuery}
+            />
+          ) : (
+            ""
+          )}
         </LayoutMain>
       </LayoutWrap>
 
@@ -89,3 +115,10 @@ export default function Home() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+    revalidate: REVALIDATE_TIME,
+  };
+};

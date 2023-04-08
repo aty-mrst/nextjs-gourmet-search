@@ -1,80 +1,104 @@
-// type PaginationType = {
-//   currentNum: number;
-// };
-
-import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 type PaginationType = {
-  // setSearchNum: any;
-  // setShopData: any;
-  currentPage: number;
+  currentPage: number | any;
+  totalPages?: number;
+  path: string;
 };
 
 export const Pagination = ({
-  // setSearchNum,
-  // setShopData,
   currentPage,
+  path,
+  totalPages,
 }: PaginationType) => {
-  const router = useRouter();
-  const { page } = router.query;
+  if (!totalPages) totalPages = 1;
 
-  //urlを取得
-  let pathname = router.asPath;
-  if (pathname.indexOf("?") !== -1) {
-    pathname = pathname.substring(0, pathname.indexOf("?"));
-  }
+  const prevPage = Number(currentPage) - 1;
+  const nextPage = Number(currentPage) + 1;
 
-  //currentNum
-  // let currentNum = Number(page);
-  // if (!page) {
-  //   currentNum = 1;
-  // }
+  const liStyle =
+    "flex justify-center items-center w-[40px] h-[40px] border text-center text-[14px] border-[#F8E6CC]";
+  const currentStyle = "bg-[#017D01] text-white pointer-events-none";
 
-  //prevNum
-  // const prevNum = currentNum - 1;
-  // const nextNum = currentNum + 1;
+  /**
+   * 動的な数字部分
+   */
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+    const startPage = Math.max(1, currentPage - 1);
+    const endPage = Math.min(totalPages!, startPage + 2);
 
-  const handlePrev = async () => {
-    // router.push(`${pathname}?page=${prevNum}`);
-    // const res = await axios.get("/api/getShopLists", {
-    //   params: {
-    //     startNum: pageNum,
-    //   },
-    // });
-    // setSearchNum(res.data.results_available);
-    // setShopData(res.data.shop);
-  };
+    for (let i = startPage; i <= endPage; i++) {
+      console.log("currentPage", currentPage);
+      console.log("i", i);
+      pageNumbers.push(
+        <li key={i}>
+          <Link
+            href={`${path}?page=${i}`}
+            className={`dynamicPage ${liStyle} ${
+              i === Number(currentPage) ? currentStyle : ""
+            }`}
+          >
+            {i}
+          </Link>
+        </li>
+      );
+    }
 
-  const handleNext = async () => {
-    // router.push(`${pathname}?page=${nextNum}`);
-    // const res = await axios.get("/api/getShopLists", {
-    //   params: {
-    //     startNum: pageNum,
-    //   },
-    // });
-    // setSearchNum(res.data.results_available);
-    // setShopData(res.data.shop);
+    return pageNumbers;
   };
 
   return (
     <section>
-      【現在ページネーションの実装中・・・・】
-      <ul>
-        {/* {prevNum > 0 && (
-          <li>
-            <button onClick={handlePrev}>前へ</button>
-          </li>
-        )} */}
-
+      <ul className="flex justify-center">
+        {/* 前へ */}
         <li>
-          <span>{currentPage}</span>
+          {prevPage > 0 && (
+            <Link href={`${path}?page=${prevPage}`} className={liStyle}>
+              ＜
+            </Link>
+          )}
         </li>
 
-        {/* <li>
-          <button onClick={handleNext}>次へ</button>
-        </li> */}
+        {/* 先頭 */}
+        {currentPage > 2 && (
+          <>
+            <li>
+              <Link href={`${path}?page=${1}`} className={liStyle}>
+                1
+              </Link>
+            </li>
+            <li>
+              <span className={liStyle}>...</span>
+            </li>
+          </>
+        )}
+
+        {/* 動的な数字部分 */}
+        {renderPageNumbers()}
+
+        {/* 最後 */}
+        {nextPage <= totalPages - 1 && (
+          <>
+            <li>
+              <span className={liStyle}>...</span>
+            </li>
+            <li>
+              <Link href={`${path}?page=${totalPages}`} className={liStyle}>
+                {totalPages}
+              </Link>
+            </li>
+          </>
+        )}
+
+        {/* 次へ */}
+        <li>
+          {nextPage <= totalPages && (
+            <Link href={`${path}?page=${nextPage}`} className={liStyle}>
+              ＞
+            </Link>
+          )}
+        </li>
       </ul>
     </section>
   );

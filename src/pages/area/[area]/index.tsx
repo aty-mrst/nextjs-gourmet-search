@@ -3,23 +3,32 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { LayoutWrap } from "@/components/LayoutWrap";
+import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
+import { REVALIDATE_TIME } from "@/data/data";
 import axios from "axios";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 type HomeType = {
   area: string | undefined;
-  pageNum: number | undefined;
 };
 
-export default function Home({ area, pageNum }: HomeType) {
+export default function Home({ area }: HomeType) {
   const [searchNum, setSearchNum] = useState(null);
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
-  const [areaName, setAreaName] = useState("");
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadAreaText, setLoadAreaText] = useState("お店を探しています・・・");
+  const [isPagination, setIsPagination] = useState(true);
+
+  const router = useRouter();
+  const { query, asPath } = router;
+  const currentPage = query.page || 1;
+  const urlWithoutQuery = asPath.split("?")[0];
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -32,25 +41,33 @@ export default function Home({ area, pageNum }: HomeType) {
   };
 
   const firstGetShop = async () => {
+    setIsPagination(true);
     setShopData([]);
     setSearchNum(null);
     try {
       const res = await axios.get("/api/getShopLists", {
         params: {
           place: area,
-          startNum: 1,
+          startNum: currentPage,
         },
       });
       setGenreName("全てのジャンル");
-      setSearchNum(res.data.results_available);
       setShopData(res.data.shop);
+      setTotalPages(Math.ceil(res.data.results_available / 10));
+      await setSearchNum(res.data.results_available);
+      if (!res.data.results_available) {
+        setLoadAreaText("条件に一致するお店が見つかりませんでした。");
+      } else {
+        setLoadAreaText("お店を探しています・・・");
+      }
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
     firstGetShop();
-  }, []);
+    setSideIn(null);
+  }, [router.query]);
 
   return (
     <>
@@ -65,14 +82,34 @@ export default function Home({ area, pageNum }: HomeType) {
           sideIn={sideIn}
           setSideIn={setSideIn}
           setGenreName={setGenreName}
+          setIsPagination={setIsPagination}
         />
-        <LayoutMain shopData={shopData} currentPage={1}>
-          <TextArea searchNum={searchNum} genreName={genreName} area={area} />
+        <LayoutMain>
+          {/* リードエリア */}
+          <TextArea
+            searchNum={searchNum}
+            genreName={genreName}
+            area={area}
+            loadAreaText={loadAreaText}
+          />
+
+          {/* 店舗リスト */}
           <ul>
             {shopData.map((shop: any) => (
               <ShopItem key={shop.id} shop={shop} />
             ))}
           </ul>
+
+          {/* ページネーション */}
+          {shopData.length && isPagination ? (
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              path={urlWithoutQuery}
+            />
+          ) : (
+            ""
+          )}
         </LayoutMain>
       </LayoutWrap>
 
@@ -85,7 +122,6 @@ export default function Home({ area, pageNum }: HomeType) {
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
-    // paths: [{ params: { area: "" } }],
     paths: [],
     fallback: true,
   };
@@ -98,5 +134,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       area,
     },
+    revalidate: REVALIDATE_TIME,
   };
 };

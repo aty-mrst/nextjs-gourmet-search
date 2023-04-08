@@ -2,6 +2,8 @@ import { PLACE } from "@/data/data";
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const SHOW_NUM = 10;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -12,8 +14,10 @@ export default async function handler(
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
   //表示件数
-  const SHOW_NUM = 10;
-  const apiCount = `&count=${SHOW_NUM}`;
+  let apiCount = `&count=${SHOW_NUM}`;
+  if (req.query.count) {
+    apiCount = `&count=${req.query.count}`;
+  }
 
   //何件目から取得するかs
   let apiNum = "&start=1";
@@ -22,7 +26,6 @@ export default async function handler(
     const num = resNum * 10 - 9;
     apiNum = `&start=${num}`;
   }
-  console.log("何晩目の投稿ですか？", apiNum);
 
   //ジャンル
   let apiGenre = "";

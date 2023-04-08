@@ -11,6 +11,7 @@ type SidebarType = {
   setSideIn: any;
   setGenreName: any;
   resolvedUrl: string | undefined;
+  setIsPagination: any;
 };
 
 export const Sidebar = ({
@@ -21,6 +22,7 @@ export const Sidebar = ({
   setSideIn,
   setGenreName,
   resolvedUrl,
+  setIsPagination,
 }: SidebarType) => {
   const [inputWord, setInputWord] = useState("");
   /**
@@ -58,7 +60,8 @@ export const Sidebar = ({
    */
   const searchWord = async (e: any, inputWord: string) => {
     e.preventDefault();
-    setGenreName(`「${inputWord}」で検索結果`);
+    setIsPagination(false);
+    setGenreName(`「${inputWord}」の検索結果【人気30件まで表示!!!】`);
     setSideIn(null);
 
     try {
@@ -66,6 +69,7 @@ export const Sidebar = ({
         params: {
           keyword: inputWord,
           place: area,
+          count: 30,
         },
       });
       setSearchNum(res.data.results_available);

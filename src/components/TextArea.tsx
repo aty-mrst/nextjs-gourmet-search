@@ -4,9 +4,15 @@ type TextAreaType = {
   searchNum: number | null;
   genreName: string;
   area: string | string[] | undefined;
+  loadAreaText: string;
 };
 
-export const TextArea = ({ searchNum, genreName, area }: TextAreaType) => {
+export const TextArea = ({
+  searchNum,
+  genreName,
+  area,
+  loadAreaText,
+}: TextAreaType) => {
   //エリア名を取得
   const areaData = PLACE.find((data) => {
     return data.KEY === area;
@@ -24,11 +30,7 @@ export const TextArea = ({ searchNum, genreName, area }: TextAreaType) => {
       </p>
 
       {!searchNum ? (
-        <p className="mt-3 text-sm">
-          お店を探しています・・・
-          <br />
-          しばらくしても表示されない場合は店舗がないため、他のジャンルをお調べください。
-        </p>
+        <p className="mt-3 text-sm">{loadAreaText}</p>
       ) : (
         <p className="mt-3 text-sm">
           <span className="inline-block font-bold text-xl mr-1">
