@@ -3,11 +3,12 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { LayoutWrap } from "@/components/LayoutWrap";
+import { Meta } from "@/components/Meta";
 import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
-import { GENRES, REVALIDATE_TIME } from "@/data/data";
+import { GENRES, PLACE, REVALIDATE_TIME } from "@/data/data";
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
@@ -73,8 +74,16 @@ export default function Home({ area, genreNum, genreItem }: HomeType) {
     setSideIn(null);
   }, [genreNum, router.query]);
 
+  //エリア名を取得
+  const areaData = PLACE.find((data) => {
+    return data.KEY === area;
+  });
+  const areaName = areaData?.NAME;
+
   return (
     <>
+      <Meta title={`${areaName}の${genreItem}`} />
+
       <Header onClick={firstGetShop} />
 
       <LayoutWrap>

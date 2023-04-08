@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { LayoutWrap } from "@/components/LayoutWrap";
+import { Meta } from "@/components/Meta";
 import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
@@ -67,6 +68,8 @@ export default function Home() {
 
   return (
     <>
+      <Meta />
+
       <Header onClick={firstGetShop} />
 
       <LayoutWrap>
