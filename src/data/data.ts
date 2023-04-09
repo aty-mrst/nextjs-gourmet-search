@@ -1,4 +1,4 @@
-export const REVALIDATE_TIME = 60 * 15;
+export const REVALIDATE_TIME = 3600 * 3; //3時間
 
 export const PLACE = [
   { KEY: "all", URL: "/", NAME: "山口県全域", POSITION: "&service_area=SA75" },
