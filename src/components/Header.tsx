@@ -10,7 +10,7 @@ export const Header = ({ onClick }: HeaderType) => {
     <header className="text-center border-b border-[#F8E6CC] fixed w-[100%] top-0 bg-white z-20">
       <h1 className="inline-block py-3">
         <Link href={"/"} className="text-xl font-bold" onClick={onClick}>
-          <span className="text-[#017D01] text-2xl">山口県</span>グルメガイド
+          <span className="text-[#017D01] text-2xl">東京駅チカ</span>グルメ
         </Link>
       </h1>
 

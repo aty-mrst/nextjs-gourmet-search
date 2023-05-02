@@ -82,7 +82,7 @@ export default function Home({ area, genreNum, genreItem }: HomeType) {
 
   return (
     <>
-      <Meta title={`${areaName}の${genreItem}`} />
+      <Meta title={`${areaName}駅チカの${genreItem}`} />
 
       <Header onClick={firstGetShop} />
 

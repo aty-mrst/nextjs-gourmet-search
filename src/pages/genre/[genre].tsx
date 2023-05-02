@@ -75,7 +75,7 @@ export default function Home({ genreNum, genreItem }: HomeType) {
 
   return (
     <>
-      <Meta title={`山口県の${genreItem}`} />
+      <Meta title={`東京駅チカの${genreItem}`} />
 
       <Header onClick={firstGetShop} />
 

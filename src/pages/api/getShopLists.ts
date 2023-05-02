@@ -2,8 +2,12 @@ import { PLACE } from "@/data/data";
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
+//表示件数
 export const SHOW_NUM = 10;
 
+/**
+ * 飲食店のリストを取得するAPI
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -19,7 +23,7 @@ export default async function handler(
     apiCount = `&count=${req.query.count}`;
   }
 
-  //何件目から取得するかs
+  //何件目から取得するか
   let apiNum = "&start=1";
   if (req.query.startNum) {
     const resNum: any = req.query.startNum;
@@ -51,7 +55,7 @@ export default async function handler(
 
   try {
     const resData = await axios.get(
-      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=5`
+      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=3`
     );
     const shopLists = resData.data.results;
 

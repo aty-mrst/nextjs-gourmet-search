@@ -1,15 +1,10 @@
 {
-  "name": "山口県グルメガイド",
-  "short_name": "山口県グルメガイド",
+  "name": "東京駅チカグルメ",
+  "short_name": "東京駅チカグルメ",
   "icons": [
     {
       "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-256x256.png",
-      "sizes": "256x256",
       "type": "image/png"
     },
     {
@@ -28,5 +23,5 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "description": "山口県の飲食店が検索できます"
+  "description": "駅から徒歩15分以内の飲食店が検索できます"
 }
