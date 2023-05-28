@@ -24,8 +24,8 @@ export default function Home({ genreNum, genreItem }: HomeType) {
   const [shopData, setShopData] = useState([]);
   const [genreName, setGenreName] = useState("全てのジャンル");
   const [totalPages, setTotalPages] = useState(1);
-  const [loadAreaText, setLoadAreaText] = useState("お店を探しています・・・");
   const [isPagination, setIsPagination] = useState(true);
+  const [isLoad, setIsLoad] = useState(true); //ロード用
 
   const router = useRouter();
   const { query, asPath } = router;
@@ -43,6 +43,7 @@ export default function Home({ genreNum, genreItem }: HomeType) {
   };
 
   const firstGetShop = async () => {
+    setIsLoad(true);
     setIsPagination(true);
     setShopData([]);
     setSearchNum(null);
@@ -57,12 +58,8 @@ export default function Home({ genreNum, genreItem }: HomeType) {
       setGenreName(genreItem);
       setShopData(res.data.shop);
       setTotalPages(Math.ceil(res.data.results_available / 10));
-      await setSearchNum(res.data.results_available);
-      if (!res.data.results_available) {
-        setLoadAreaText("条件に一致するお店が見つかりませんでした。");
-      } else {
-        setLoadAreaText("お店を探しています・・・");
-      }
+      setSearchNum(res.data.results_available);
+      setIsLoad(false);
     } catch (err) {
       console.log(err);
     }
@@ -96,7 +93,7 @@ export default function Home({ genreNum, genreItem }: HomeType) {
             searchNum={searchNum}
             genreName={genreName}
             area={"all"}
-            loadAreaText={loadAreaText}
+            isLoad={isLoad}
           />
 
           {/* 店舗リスト */}

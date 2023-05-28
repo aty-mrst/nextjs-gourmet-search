@@ -15,12 +15,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [searchNum, setSearchNum] = useState(null);
-  const [shopData, setShopData] = useState([]);
-  const [genreName, setGenreName] = useState("全てのジャンル");
-  const [totalPages, setTotalPages] = useState(1);
-  const [loadAreaText, setLoadAreaText] = useState("お店を探しています・・・");
-  const [isPagination, setIsPagination] = useState(true);
+  const [searchNum, setSearchNum] = useState(null); //ショップ数
+  const [shopData, setShopData] = useState([]); //ショップリスト
+  const [genreName, setGenreName] = useState("全てのジャンル"); //ジャンル名
+  const [totalPages, setTotalPages] = useState(1); //ページネーションの総数
+  const [isPagination, setIsPagination] = useState(true); //ページネーションの有無
+  const [isLoad, setIsLoad] = useState(true); //ロード用
 
   const router = useRouter();
   const { query, asPath } = router;
@@ -38,25 +38,20 @@ export default function Home() {
   };
 
   const firstGetShop = async () => {
-    setIsPagination(true);
-    setShopData([]);
-    setSearchNum(null);
     try {
+      setIsLoad(true);
+      setShopData([]);
+      setSearchNum(null);
       const res = await axios.get("/api/getShopLists", {
         params: {
           place: "all",
           startNum: currentPage,
         },
       });
-      setGenreName("全てのジャンル");
       setShopData(res.data.shop);
-      setTotalPages(Math.ceil(res.data.results_available / 10));
       setSearchNum(res.data.results_available);
-      if (!res.data.results_available) {
-        setLoadAreaText("条件に一致するお店が見つかりませんでした。");
-      } else {
-        setLoadAreaText("お店を探しています・・・");
-      }
+      setTotalPages(Math.ceil(res.data.results_available / 10));
+      setIsLoad(false);
     } catch (err) {
       console.log(err);
     }
@@ -82,6 +77,7 @@ export default function Home() {
           setSideIn={setSideIn}
           setGenreName={setGenreName}
           setIsPagination={setIsPagination}
+          setIsLoad={setIsLoad}
         />
         <LayoutMain>
           {/* リードエリア */}
@@ -89,7 +85,7 @@ export default function Home() {
             searchNum={searchNum}
             genreName={genreName}
             area={"all"}
-            loadAreaText={loadAreaText}
+            isLoad={isLoad}
           />
 
           {/* 店舗リスト */}

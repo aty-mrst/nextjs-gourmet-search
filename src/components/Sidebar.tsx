@@ -12,6 +12,7 @@ type SidebarType = {
   setGenreName: any;
   resolvedUrl: string | undefined;
   setIsPagination: any;
+  setIsLoad?: any;
 };
 
 export const Sidebar = ({
@@ -23,8 +24,10 @@ export const Sidebar = ({
   setGenreName,
   resolvedUrl,
   setIsPagination,
+  setIsLoad,
 }: SidebarType) => {
   const [inputWord, setInputWord] = useState("");
+
   /**
    * ジャンル別 店舗リストを取得
    */
@@ -60,8 +63,10 @@ export const Sidebar = ({
    */
   const searchWord = async (e: any, inputWord: string) => {
     e.preventDefault();
+    setIsLoad(true);
+    setShopData([]);
     setIsPagination(false);
-    setGenreName(`「${inputWord}」の検索結果【人気30件まで表示!!!】`);
+    setGenreName(`「${inputWord}」の検索結果 ※人気の30件まで表示`);
     setSideIn(null);
 
     try {
@@ -76,6 +81,7 @@ export const Sidebar = ({
       setShopData(res.data.shop);
 
       setInputWord("");
+      setIsLoad(false);
     } catch (err) {
       console.log(err);
     }

@@ -1,17 +1,18 @@
 import { PLACE } from "@/data/data";
+import { CircularProgress } from "@mui/material";
 
 type TextAreaType = {
   searchNum: number | null;
   genreName: string;
   area: string | string[] | undefined;
-  loadAreaText: string;
+  isLoad?: boolean;
 };
 
 export const TextArea = ({
   searchNum,
   genreName,
   area,
-  loadAreaText,
+  isLoad,
 }: TextAreaType) => {
   //エリア名を取得
   const areaData = PLACE.find((data) => {
@@ -29,14 +30,18 @@ export const TextArea = ({
         ジャンル <span className="font-bold text-lg ml-1">{genreName}</span>
       </p>
 
-      {!searchNum ? (
-        <p className="mt-3 text-sm">{loadAreaText}</p>
-      ) : (
+      {isLoad ? (
+        <CircularProgress color="success" />
+      ) : searchNum ? (
         <p className="mt-3 text-sm">
           <span className="inline-block font-bold text-xl mr-1">
             {searchNum}
           </span>
           件のお店が見つかりました！
+        </p>
+      ) : (
+        <p className="mt-3 text-sm">
+          条件に一致するお店が見つかりませんでした。
         </p>
       )}
     </>
