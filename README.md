@@ -1,7 +1,5 @@
 # Next.js× ホットペッパーグルメ API でグルメ検索アプリ制作
 
-## アーキテクチャ図
-
 ## 機能
 
 - 地域別検索
@@ -15,7 +13,7 @@
 - [ホットペッパー API リファレンス](https://webservice.recruit.co.jp/doc/hotpepper/reference.html)
 - [Hotpepper API を使って指定した地点の近くの飲食店を検索する](https://coffee-nominagara.com/hotpepper-api)
 
-## やりたい事・修正点
+## Todo
 
 - 型定義 any の修正
 
