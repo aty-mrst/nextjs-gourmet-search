@@ -1,3 +1,5 @@
+import { useAuthContext } from "@/context/AuthContext";
+import axios from "axios";
 import Image from "next/image";
 
 type ShopItemType = {
@@ -5,13 +7,26 @@ type ShopItemType = {
 };
 
 export const ShopItem = ({ shop }: ShopItemType) => {
+  const { currentUser } = useAuthContext(); //ログイン状態
+  console.log(currentUser?.uid);
+
+  const onLike = async (shopId: string) => {
+    await axios.post("/api/likeShop", {
+      currentUserId: currentUser?.uid,
+      shopId: shopId,
+    });
+  };
+
   return (
-    <li key={shop.id} className="my-5 relative">
-      <a
-        href={shop.urls.pc}
-        target="_blank"
+    <li key={shop.id} className="my-5 relative" id={shop.id}>
+      <div
+        // href={shop.urls.pc}
+        // target="_blank"
         className="block px-5 py-8 bg-[#FEF6E8] border border-[#F8E6CC] hover:border lg:flex justify-between ease-in duration-150 hover:border-[#017D01]"
       >
+        <button className="cursor-point" onClick={() => onLike(shop.id)}>
+          ❤️
+        </button>
         <div className="w-[200px] h-[200px] relative m-auto">
           <Image
             fill
@@ -50,7 +65,7 @@ export const ShopItem = ({ shop }: ShopItemType) => {
 
           <p className="text-sm">{shop.catch}</p>
         </div>
-      </a>
+      </div>
     </li>
   );
 };

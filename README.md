@@ -24,3 +24,6 @@
 ## 公開 URL
 
 https://gourmet-search-tau.vercel.app/
+
+## Todo
+- 既にいいね済みの店舗をいいねした時に、裏側でエラーが出ている  
