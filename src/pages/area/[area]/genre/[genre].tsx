@@ -8,7 +8,9 @@ import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
+import { useAuthContext } from "@/context/AuthContext";
 import { GENRES, PLACE, REVALIDATE_TIME } from "@/data/data";
+import { Alert } from "@mui/material";
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
@@ -21,17 +23,21 @@ type HomeType = {
 };
 
 export default function Home({ area, genreNum, genreItem }: HomeType) {
-  const [searchNum, setSearchNum] = useState(null);
-  const [shopData, setShopData] = useState([]);
-  const [genreName, setGenreName] = useState("全てのジャンル");
-  const [totalPages, setTotalPages] = useState(1);
-  const [isPagination, setIsPagination] = useState(true);
-  const [isLoad, setIsLoad] = useState(false);
+  const [searchNum, setSearchNum] = useState(null); //ショップの数
+  const [shopData, setShopData] = useState([]); //ショップのリスト
+  const [genreName, setGenreName] = useState("全てのジャンル"); //ジャンル名
+  const [totalPages, setTotalPages] = useState(1); //ページネーションの総数
+  const [isPagination, setIsPagination] = useState(true); //ページネーションの有無
+  const [isLoad, setIsLoad] = useState(false); //ロード用
+  const [isLikePopUp, setIsLikePopUp] = useState(false); //ポップアップ用
+  const [popUpText, setPopUpText] = useState(""); //ポップアップテキスト
 
   const router = useRouter();
   const { query, asPath } = router;
   const currentPage = query.page || 1;
   const urlWithoutQuery = asPath.split("?")[0];
+
+  const { currentUser } = useAuthContext(); //ログイン状態
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -81,7 +87,15 @@ export default function Home({ area, genreNum, genreItem }: HomeType) {
     <>
       <Meta title={`${areaName}駅チカの${genreItem}`} />
 
-      <Header onClick={firstGetShop} />
+      {isLikePopUp && (
+        <div className="fixed w-[100%] top-0 z-30">
+          <Alert variant="filled" severity="success">
+            {popUpText}
+          </Alert>
+        </div>
+      )}
+
+      <Header onClick={firstGetShop} currentUser={currentUser} />
 
       <LayoutWrap>
         <Sidebar
@@ -107,7 +121,12 @@ export default function Home({ area, genreNum, genreItem }: HomeType) {
           {/* 店舗リスト */}
           <ul>
             {shopData.map((shop: any) => (
-              <ShopItem key={shop.id} shop={shop} />
+              <ShopItem
+                key={shop.id}
+                shop={shop}
+                setIsLikePopUp={setIsLikePopUp}
+                setPopUpText={setPopUpText}
+              />
             ))}
           </ul>
 

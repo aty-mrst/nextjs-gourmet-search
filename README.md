@@ -28,5 +28,3 @@ https://gourmet-search-tau.vercel.app/
 ## Todo
 
 - 未ログイン状態でいいねした時は、ログインに誘導して、いいねされている状態に
-- ログイン/会員登録の整理
-- 各種 UI 調整

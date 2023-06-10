@@ -3,7 +3,6 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 
 type ShopItemType = {
   shop: any;

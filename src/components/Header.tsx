@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 type HeaderType = {
   onClick?: () => void;
   isNotSearch?: boolean;
-  currentUser?: any;
+  currentUser: any;
 };
 
 export const Header = ({ onClick, isNotSearch, currentUser }: HeaderType) => {
@@ -37,7 +37,7 @@ export const Header = ({ onClick, isNotSearch, currentUser }: HeaderType) => {
               <button onClick={onLogout} className="text-sm">
                 ログアウト
               </button>
-              <Link href={"mypage"} className="text-sm">
+              <Link href={"/mypage"} className="text-sm">
                 マイページ
               </Link>
             </>
