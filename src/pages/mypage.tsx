@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Alert, CircularProgress } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Mypage() {
+  const router = useRouter();
   const { currentUser } = useAuthContext(); //ログイン状態
   const [shopData, setShopData] = useState([]); //ショップリスト
   const [isLoad, setIsLoad] = useState(false); //ローディング用
@@ -16,6 +18,7 @@ export default function Mypage() {
   const [popUpText, setPopUpText] = useState(""); //ポップアップテキスト
 
   useEffect(() => {
+    if (!currentUser) router.push("/");
     getLikeShop();
   }, []);
 

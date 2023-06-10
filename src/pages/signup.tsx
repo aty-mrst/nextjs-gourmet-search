@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../../lib/firebase";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
@@ -11,6 +11,10 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { currentUser } = useAuthContext(); //ログイン状態
+
+  useEffect(() => {
+    if (currentUser) router.push("/");
+  }, []);
 
   /**
    * ユーザー会員登録
