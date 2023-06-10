@@ -27,15 +27,24 @@ export default async function handler(
    * likeコレクションにいいねしたshopIdを保存する
    */
 
-  //既に登録済みのshopIDがあるか判定
+  //既にいいね済みのshopIDがあるか判定
+  let isExistShop = false;
   await getDocs(usersCollectionRef).then((snapshot) => {
     snapshot.docs.forEach((doc) => {
       const existShopId = doc.data().shopId;
+      console.log(existShopId);
       if (existShopId === shopId) {
-        return res.status(200).json({});
+        isExistShop = true;
       }
     });
   });
+
+  if (isExistShop)
+    return res.status(200).json({
+      message: {
+        popup: "このお店はすでにいいねされています！",
+      },
+    });
 
   //登録済みのshopIdがなければ登録
   await setDoc(doc(db, "user", currentUserId), {});
@@ -43,5 +52,9 @@ export default async function handler(
     shopId: shopId,
   });
 
-  res.status(200).json({});
+  res.status(200).json({
+    message: {
+      popup: "いいねしました！マイページからご確認ください。",
+    },
+  });
 }

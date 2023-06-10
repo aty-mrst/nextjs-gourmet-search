@@ -39,12 +39,9 @@ export default async function handler(
   //apiキー
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
-  console.log(`${apiUrl}${apiKey}${apiShopId}&range=3`);
-
   try {
     const resData = await axios.get(`${apiUrl}${apiKey}${apiShopId}&range=3`);
     const shopLists = resData.data.results;
-    console.log(shopLists);
 
     res.status(200).json(shopLists);
   } catch (err) {
