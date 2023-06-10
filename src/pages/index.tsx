@@ -8,7 +8,10 @@ import { Pagination } from "@/components/Pagination";
 import { ShopItem } from "@/components/ShopItem";
 import { Sidebar } from "@/components/Sidebar";
 import { TextArea } from "@/components/TextArea";
+import { useAuthContext } from "@/context/AuthContext";
 import { REVALIDATE_TIME } from "@/data/data";
+import { getAuth, onAuthStateChanged } from "@firebase/auth";
+import { Alert, AlertTitle } from "@mui/material";
 import axios from "axios";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
@@ -21,11 +24,15 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1); //ページネーションの総数
   const [isPagination, setIsPagination] = useState(true); //ページネーションの有無
   const [isLoad, setIsLoad] = useState(true); //ロード用
+  const [isLikePopUp, setIsLikePopUp] = useState(false); //ポップアップ用
+  const [popUpText, setPopUpText] = useState(""); //ポップアップテキスト
 
   const router = useRouter();
   const { query, asPath } = router;
   const currentPage = query.page || 1;
   const urlWithoutQuery = asPath.split("?")[0];
+
+  const { currentUser } = useAuthContext(); //ログイン状態
 
   //sp サイドメニューの表示切り替え
   const [sideIn, setSideIn] = useState<string | null>(null);
@@ -65,7 +72,15 @@ export default function Home() {
     <>
       <Meta />
 
-      <Header onClick={firstGetShop} />
+      {isLikePopUp && (
+        <div className="fixed w-[100%] top-0 z-30">
+          <Alert variant="filled" severity="success">
+            {popUpText}
+          </Alert>
+        </div>
+      )}
+
+      <Header onClick={firstGetShop} currentUser={currentUser} />
 
       <LayoutWrap>
         <Sidebar
@@ -91,7 +106,12 @@ export default function Home() {
           {/* 店舗リスト */}
           <ul>
             {shopData.map((shop: any) => (
-              <ShopItem key={shop.id} shop={shop} />
+              <ShopItem
+                key={shop.id}
+                shop={shop}
+                setIsLikePopUp={setIsLikePopUp}
+                setPopUpText={setPopUpText}
+              />
             ))}
           </ul>
 

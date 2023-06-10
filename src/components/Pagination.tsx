@@ -29,8 +29,6 @@ export const Pagination = ({
     const endPage = Math.min(totalPages!, startPage + 2);
 
     for (let i = startPage; i <= endPage; i++) {
-      console.log("currentPage", currentPage);
-      console.log("i", i);
       pageNumbers.push(
         <li key={i}>
           <Link

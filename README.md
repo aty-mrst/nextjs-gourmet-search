@@ -24,3 +24,7 @@
 ## 公開 URL
 
 https://gourmet-search-tau.vercel.app/
+
+## Todo
+
+- 未ログイン状態でいいねした時は、ログインに誘導して、いいねされている状態に
