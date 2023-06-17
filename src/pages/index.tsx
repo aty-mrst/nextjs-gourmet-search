@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { Meta } from "@/components/Meta";
 import { SearchArea } from "@/components/SearchArea";
+import { TopMv } from "@/components/TopMv";
 
 type Props = {
   prefecture: [];
@@ -14,23 +15,11 @@ export default function Home({ prefecture, genres }: Props) {
     <>
       <Meta />
 
+      
       <Header />
+      <TopMv prefecture={prefecture} genres={genres} />
 
-      <LayoutMain>
-        <div>
-          <h2>
-            あなただけのお店を
-            <br />
-            簡単に探そう
-          </h2>
-          <p>
-            全国のお店から、
-            <br />
-            あなた合ったお店がすぐ見つかる
-          </p>
-          <SearchArea prefecture={prefecture} genres={genres} />
-        </div>
-      </LayoutMain>
+      {/* <LayoutMain></LayoutMain> */}
 
       <Footer />
     </>

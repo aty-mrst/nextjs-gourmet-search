@@ -99,77 +99,71 @@ export const SearchArea = ({ prefecture = [], genres = [] }: Props) => {
   };
 
   return (
-    <div className="mb-6 border-b-2 py-3 lg:py-5 px-5 lg:flex sticky top-[52px] z-10 bg-white">
-      <div className="flex flex-wrap lg:flex-nowrap justify-between max-w-[350px] lg:max-w-[500px] lg:w-[500px]">
-        <div className="w-[100%] lg:w-[65%] flex">
-          {/* エリア */}
-          <div className="w-[40%] border-2 border-[#999s]">
-            <select
-              name=""
-              id=""
-              onChange={handleAreaChange}
-              className="w-[100%] py-[10px] px-4 text-[14px] outline-none"
-            >
-              {prefecture.map((area: any) => {
-                //selectの初期値を設定
-                let isSelect = false;
-                if (area.name === selectedAreaName) {
-                  isSelect = true;
-                }
-                return (
-                  <option key={area.name} value={area.code} selected={isSelect}>
-                    {area.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          {/* ジャンル */}
-          <div className="w-[60%] border-2 border-[#999s] border-l-0">
-            <select
-              name=""
-              id=""
-              onChange={handleGenreChange}
-              className="w-[100%] py-[10px] px-4 text-[14px] outline-none"
-            >
-              <option value="">全てのジャンル</option>
-              {genres.map((genre: any) => {
-                //selectの初期値を設定
-                let isSelect = false;
-                if (genre.name === selectedGenreName) {
-                  isSelect = true;
-                }
-                return (
-                  <option
-                    key={genre.name}
-                    value={genre.code}
-                    selected={isSelect}
-                  >
-                    {genre.name}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+    <div className="flex flex-wrap lg:flex-nowrap justify-between">
+      <div className="w-[100%] lg:w-[65%] flex justify-between">
+        {/* エリア */}
+        <div className="w-[39%] border-[1px] border-[#999s] rounded-md overflow-hidden shadow">
+          <select
+            name=""
+            id=""
+            onChange={handleAreaChange}
+            className="w-[100%] py-[10px] px-3 text-[14px] outline-none h-[100%] "
+          >
+            {prefecture.map((area: any) => {
+              //selectの初期値を設定
+              let isSelect = false;
+              if (area.name === selectedAreaName) {
+                isSelect = true;
+              }
+              return (
+                <option key={area.name} value={area.code} selected={isSelect}>
+                  {area.name}
+                </option>
+              );
+            })}
+          </select>
         </div>
 
-        {/* キーワード */}
-        <div className="w-[100%] lg:w-[35%]">
-          <input
-            type="text"
-            value={searchText}
-            onChange={handleSearchInput}
-            placeholder="キーワード"
-            className="border-2 border-t-0 lg:border-t-2 lg:border-l-0 border-[#999s] w-[100%] py-[10px] px-4 text-[14px] outline-none"
-          />
+        {/* ジャンル */}
+        <div className="w-[59%] border-[1px] border-[#999s] rounded-md overflow-hidden shadow">
+          <select
+            name=""
+            id=""
+            onChange={handleGenreChange}
+            className="w-[100%] py-[10px] px-3 text-[14px] outline-none h-[100%]"
+          >
+            <option value="">全てのジャンル</option>
+            {genres.map((genre: any) => {
+              //selectの初期値を設定
+              let isSelect = false;
+              if (genre.name === selectedGenreName) {
+                isSelect = true;
+              }
+              return (
+                <option key={genre.name} value={genre.code} selected={isSelect}>
+                  {genre.name}
+                </option>
+              );
+            })}
+          </select>
         </div>
+      </div>
+
+      {/* キーワード */}
+      <div className="w-[100%] lg:w-[35%] lg:ml-2 mt-2 lg:mt-0">
+        <input
+          type="text"
+          value={searchText}
+          onChange={handleSearchInput}
+          placeholder="キーワード"
+          className="border-[1px] h-[100%] lg:border-t-2 lg:border-l-0 border-[#999s] w-[100%] py-[10px] px-3 text-[14px] outline-none rounded-md shadow"
+        />
       </div>
 
       {/* 検索 */}
       <button
         onClick={handleSearch}
-        className="block w-[100%] lg:w-[100px] bg-[#017D01] text-white py-[10px] border-0 text-[14px] max-w-[350px]"
+        className="block rounded-md mt-2 lg:mt-0 lg:ml-2 w-[100%] lg:w-[100px] bg-[#017D01] text-white py-[10px] border-0 text-[14px] max-w-[400px] shadow"
       >
         検索する
       </button>

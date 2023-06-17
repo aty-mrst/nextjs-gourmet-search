@@ -3,19 +3,29 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 type ShopItemType = {
   shop: any;
   setIsLikePopUp: any;
   setPopUpText: any;
+  isLiked: boolean;
 };
 
 export const ShopItem = ({
   shop,
   setIsLikePopUp,
   setPopUpText,
+  isLiked,
 }: ShopItemType) => {
   const { currentUser } = useAuthContext(); //ログイン状態
+
+  const [isLikeHover, setIsLikeHover] = useState(false);
+  const [isClick, setIsClick] = useState(false);
+
+  const router = useRouter();
 
   /**
    * いいね登録
@@ -23,6 +33,7 @@ export const ShopItem = ({
   const onLike = async (shopId: string) => {
     if (currentUser) {
       //ログイン中
+      setIsClick(true);
       const res = await axios.post("/api/addLikeShop", {
         currentUserId: currentUser?.uid,
         shopId: shopId,
@@ -34,53 +45,48 @@ export const ShopItem = ({
       }, 3000);
     } else {
       //未ログイン状態
+      console.log("未ログインです！", shopId);
+      router.push("/login");
     }
+  };
+
+  const onHover = () => {
+    setIsLikeHover(true);
+  };
+
+  const onHoverLeave = () => {
+    setIsLikeHover(false);
   };
 
   return (
     <>
       <li key={shop.id} className="my-5 relative" id={shop.id}>
-        <div className="block px-5 py-8 bg-[#FEF6E8] border lg:flex justify-between ease-in duration-150 border-[#017D01]">
+        <div className="block px-5 py-8 bg-[#FEF6E8] border lg:flex justify-between ease-in duration-150 border-[#017D01] rounded-md">
           <button
             className="cursor-point absolute top-4 md:top-6 right-4 md-right-6 text-2xl bg-white rounded-[50%] w-[40px] h-[40px] outline-none"
             onClick={() => onLike(shop.id)}
+            onMouseEnter={onHover}
+            onMouseLeave={onHoverLeave}
           >
-            <FavoriteOutlinedIcon
-              sx={{ color: "#FF555A" }}
-              className="favo-color"
-            />
+            {isLikeHover || isLiked || isClick ? (
+              <FavoriteOutlinedIcon
+                sx={{ color: "#FF555A" }}
+                className="favo-color"
+              />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
           </button>
-          {/* {currentUser ? (
-            <button
-              className="cursor-point absolute top-4 md:top-6 right-4 md-right-6 text-2xl bg-white rounded-[50%] w-[40px] h-[40px] outline-none"
-              onClick={() => onLike(shop.id)}
-            >
-              <FavoriteOutlinedIcon
-                sx={{ color: "#FF555A" }}
-                className="favo-color"
-              />
-            </button>
-          ) : (
-            <Link
-              href={"/login"}
-              className="text-center cursor-point absolute top-4 md:top-6 right-4 md-right-6 text-2xl bg-white rounded-[50%] w-[40px] h-[40px]"
-            >
-              <FavoriteOutlinedIcon
-                sx={{ color: "#FF555A" }}
-                className="favo-color"
-              />
-            </Link>
-          )} */}
-          <Link href={shop.urls.pc} target="_blank" className="">
-            <figure className="w-[200px] h-[200px] relative m-auto overflow-hidden">
+          <figure className="w-[200px] h-[200px] relative m-auto overflow-hidden">
+            <Link href={shop.urls.pc} target="_blank" className="">
               <Image
                 fill
                 src={shop.photo.pc.l}
                 alt={shop.name}
                 className="object-cover hover:scale-[1.1] transition"
               />
-            </figure>
-          </Link>
+            </Link>
+          </figure>
 
           <div className="lg:w-[calc(100%-220px)] mt-4 lg:mt-0">
             <small className="text-xs block text-[#017D01]">

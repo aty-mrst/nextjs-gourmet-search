@@ -25,11 +25,19 @@ export default function Login() {
   }, []);
 
   /**
+   * ローカルストレージに店舗IDがあれば取得してfirestoreへ保存する
+   */
+  const addLocalShopId = () => {
+    console.log("ローカルストレージの店舗IDをfirestoreへ保存する");
+  };
+
+  /**
    * Googleアカウントでログイン
    */
   const onGoogleLogin = async (e: any) => {
     e.preventDefault();
     await signInWithRedirect(auth, provider);
+    addLocalShopId();
   };
 
   /**

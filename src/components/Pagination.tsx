@@ -54,7 +54,7 @@ export const Pagination = ({
         <li key={i}>
           <Link
             href={`${resultPath}${pageParam}${i}`}
-            className={`dynamicPage ${liStyle} ${
+            className={`dynamicPage rounded ${liStyle} ${
               i === Number(currentPage) ? currentStyle : ""
             }`}
           >
@@ -75,7 +75,7 @@ export const Pagination = ({
           {prevPage > 0 && (
             <Link
               href={`${resultPath}${pageParam}${prevPage}`}
-              className={liStyle}
+              className={`${liStyle} rounded`}
             >
               ＜
             </Link>
@@ -85,13 +85,16 @@ export const Pagination = ({
         {/* 先頭 */}
         {currentPage > 2 && (
           <>
-            <li>
-              <Link href={`${resultPath}${pageParam}${1}`} className={liStyle}>
+            <li className="">
+              <Link
+                href={`${resultPath}${pageParam}${1}`}
+                className={`${liStyle} rounded`}
+              >
                 1
               </Link>
             </li>
             <li>
-              <span className={liStyle}>...</span>
+              <span className={`${liStyle} rounded`}>...</span>
             </li>
           </>
         )}
@@ -103,12 +106,12 @@ export const Pagination = ({
         {nextPage <= totalPages - 1 && (
           <>
             <li>
-              <span className={liStyle}>...</span>
+              <span className={`${liStyle} rounded`}>...</span>
             </li>
             <li>
               <Link
                 href={`${resultPath}${pageParam}${totalPages}`}
-                className={liStyle}
+                className={`${liStyle} rounded`}
               >
                 {totalPages}
               </Link>
@@ -121,7 +124,7 @@ export const Pagination = ({
           {nextPage <= totalPages && (
             <Link
               href={`${resultPath}${pageParam}${nextPage}`}
-              className={liStyle}
+              className={`${liStyle} rounded`}
             >
               ＞
             </Link>
