@@ -59,15 +59,8 @@ export default function Mypage() {
 
   return (
     <>
-      {isLikePopUp && (
-        <div className="fixed w-[100%] top-0 z-30">
-          <Alert variant="filled" severity="success">
-            {popUpText}
-          </Alert>
-        </div>
-      )}
+      <Header />
 
-      <Header isNotSearch currentUser={currentUser} />
       <div className="mt-[100px] lg:mt-[120px] mb-20 max-w-[800px] mx-auto px-[15px]">
         <h1 className="text-center font-bold text-lg">お気に入り済みの店舗</h1>
         {isLoad ? (
@@ -122,6 +115,17 @@ export default function Mypage() {
             )}
           </ul>
         )}
+      </div>
+
+      {/* いいねのポップアップ */}
+      <div
+        className={`fixed w-[95%] left-[50%] translate-x-[-50%] bottom-3 z-30 ease-in-out duration-200 ${
+          isLikePopUp ? "translate-y-[0]" : "translate-y-[150%]"
+        } `}
+      >
+        <Alert variant="filled" severity="success">
+          {popUpText}
+        </Alert>
       </div>
     </>
   );

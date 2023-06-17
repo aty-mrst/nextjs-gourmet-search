@@ -25,11 +25,19 @@ export default function Login() {
   }, []);
 
   /**
+   * ローカルストレージに店舗IDがあれば取得してfirestoreへ保存する
+   */
+  const addLocalShopId = () => {
+    console.log("ローカルストレージの店舗IDをfirestoreへ保存する");
+  };
+
+  /**
    * Googleアカウントでログイン
    */
   const onGoogleLogin = async (e: any) => {
     e.preventDefault();
     await signInWithRedirect(auth, provider);
+    addLocalShopId();
   };
 
   /**
@@ -91,7 +99,7 @@ export default function Login() {
 
   return (
     <>
-      <Header isNotSearch currentUser={currentUser} />
+      <Header />
 
       <main className="mt-[150px] px-[15px] w-[350px] max-[100%] mx-auto">
         <h1 className="text-center font-bold text-lg lg:text-lg">ログイン</h1>
