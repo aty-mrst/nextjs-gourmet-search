@@ -67,7 +67,7 @@ export default function Mypage() {
         </div>
       )}
 
-      <Header isNotSearch currentUser={currentUser} />
+      <Header />
       <div className="mt-[100px] lg:mt-[120px] mb-20 max-w-[800px] mx-auto px-[15px]">
         <h1 className="text-center font-bold text-lg">お気に入り済みの店舗</h1>
         {isLoad ? (

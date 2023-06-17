@@ -91,7 +91,7 @@ export default function Login() {
 
   return (
     <>
-      <Header isNotSearch currentUser={currentUser} />
+      <Header />
 
       <main className="mt-[150px] px-[15px] w-[350px] max-[100%] mx-auto">
         <h1 className="text-center font-bold text-lg lg:text-lg">ログイン</h1>

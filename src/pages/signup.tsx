@@ -37,7 +37,7 @@ export default function Signup() {
 
   return (
     <>
-      <Header isNotSearch currentUser={currentUser} />
+      <Header />
 
       <main className="mt-[150px] px-[15px] w-[350px] max-[100%] mx-auto">
         <h1 className="text-center font-bold text-lg lg:text-lg">新規登録</h1>
