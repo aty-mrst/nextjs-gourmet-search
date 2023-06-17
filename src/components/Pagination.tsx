@@ -11,6 +11,27 @@ export const Pagination = ({
   path,
   totalPages,
 }: PaginationType) => {
+  let rootUrl;
+  if (process.env.NODE_ENV === "production") {
+    //本番
+    rootUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  } else if (process.env.NODE_ENV === "development") {
+    //ローカル
+    rootUrl = "http://localhost:3000";
+  }
+
+  //pageパラメータを除く
+  let url = new URL(path, rootUrl);
+  url.searchParams.delete("page");
+  const resultPath = url.href;
+
+  //pageパラメータの書き方
+  let pageParam = "&page=";
+  if (path === "/") {
+    //トップページの場合
+    pageParam = "?page=";
+  }
+
   if (!totalPages) totalPages = 1;
 
   const prevPage = Number(currentPage) - 1;
@@ -32,7 +53,7 @@ export const Pagination = ({
       pageNumbers.push(
         <li key={i}>
           <Link
-            href={`${path}?page=${i}`}
+            href={`${resultPath}${pageParam}${i}`}
             className={`dynamicPage ${liStyle} ${
               i === Number(currentPage) ? currentStyle : ""
             }`}
@@ -52,7 +73,10 @@ export const Pagination = ({
         {/* 前へ */}
         <li>
           {prevPage > 0 && (
-            <Link href={`${path}?page=${prevPage}`} className={liStyle}>
+            <Link
+              href={`${resultPath}${pageParam}${prevPage}`}
+              className={liStyle}
+            >
               ＜
             </Link>
           )}
@@ -62,7 +86,7 @@ export const Pagination = ({
         {currentPage > 2 && (
           <>
             <li>
-              <Link href={`${path}?page=${1}`} className={liStyle}>
+              <Link href={`${resultPath}${pageParam}${1}`} className={liStyle}>
                 1
               </Link>
             </li>
@@ -82,7 +106,10 @@ export const Pagination = ({
               <span className={liStyle}>...</span>
             </li>
             <li>
-              <Link href={`${path}?page=${totalPages}`} className={liStyle}>
+              <Link
+                href={`${resultPath}${pageParam}${totalPages}`}
+                className={liStyle}
+              >
                 {totalPages}
               </Link>
             </li>
@@ -92,7 +119,10 @@ export const Pagination = ({
         {/* 次へ */}
         <li>
           {nextPage <= totalPages && (
-            <Link href={`${path}?page=${nextPage}`} className={liStyle}>
+            <Link
+              href={`${resultPath}${pageParam}${nextPage}`}
+              className={liStyle}
+            >
               ＞
             </Link>
           )}

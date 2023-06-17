@@ -5,5 +5,9 @@ type LayoutMainType = {
 };
 
 export const LayoutMain = ({ children }: LayoutMainType) => {
-  return <main className="px-5 lg:w-[calc(100%-220px)]">{children}</main>;
+  return (
+    <main className="max-w-[1000px] mx-auto mt-[70px] mb-[100px]">
+      {children}
+    </main>
+  );
 };

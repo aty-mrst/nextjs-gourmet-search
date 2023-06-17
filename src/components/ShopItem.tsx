@@ -17,23 +17,40 @@ export const ShopItem = ({
 }: ShopItemType) => {
   const { currentUser } = useAuthContext(); //ログイン状態
 
+  /**
+   * いいね登録
+   */
   const onLike = async (shopId: string) => {
-    const res = await axios.post("/api/likeShop", {
-      currentUserId: currentUser?.uid,
-      shopId: shopId,
-    });
-    setPopUpText(res.data.message.popup);
-    setIsLikePopUp(true);
-    setTimeout(() => {
-      setIsLikePopUp(false);
-    }, 3000);
+    if (currentUser) {
+      //ログイン中
+      const res = await axios.post("/api/likeShop", {
+        currentUserId: currentUser?.uid,
+        shopId: shopId,
+      });
+      setPopUpText(res.data.message.popup);
+      setIsLikePopUp(true);
+      setTimeout(() => {
+        setIsLikePopUp(false);
+      }, 3000);
+    } else {
+      //未ログイン状態
+    }
   };
 
   return (
     <>
       <li key={shop.id} className="my-5 relative" id={shop.id}>
         <div className="block px-5 py-8 bg-[#FEF6E8] border lg:flex justify-between ease-in duration-150 border-[#017D01]">
-          {currentUser ? (
+          <button
+            className="cursor-point absolute top-4 md:top-6 right-4 md-right-6 text-2xl bg-white rounded-[50%] w-[40px] h-[40px] outline-none"
+            onClick={() => onLike(shop.id)}
+          >
+            <FavoriteOutlinedIcon
+              sx={{ color: "#FF555A" }}
+              className="favo-color"
+            />
+          </button>
+          {/* {currentUser ? (
             <button
               className="cursor-point absolute top-4 md:top-6 right-4 md-right-6 text-2xl bg-white rounded-[50%] w-[40px] h-[40px] outline-none"
               onClick={() => onLike(shop.id)}
@@ -53,7 +70,7 @@ export const ShopItem = ({
                 className="favo-color"
               />
             </Link>
-          )}
+          )} */}
           <Link href={shop.urls.pc} target="_blank" className="">
             <figure className="w-[200px] h-[200px] relative m-auto overflow-hidden">
               <Image

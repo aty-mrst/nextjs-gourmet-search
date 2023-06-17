@@ -1,143 +1,63 @@
-import FixedButton from "@/components/FixedButton";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
-import { LayoutWrap } from "@/components/LayoutWrap";
 import { Meta } from "@/components/Meta";
-import { Pagination } from "@/components/Pagination";
-import { ShopItem } from "@/components/ShopItem";
-import { Sidebar } from "@/components/Sidebar";
-import { TextArea } from "@/components/TextArea";
-import { useAuthContext } from "@/context/AuthContext";
-import { REVALIDATE_TIME } from "@/data/data";
-import { getAuth, onAuthStateChanged } from "@firebase/auth";
-import { Alert, AlertTitle } from "@mui/material";
-import axios from "axios";
-import { GetStaticProps } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { SearchArea } from "@/components/SearchArea";
 
-export default function Home() {
-  const [searchNum, setSearchNum] = useState(null); //ショップ数
-  const [shopData, setShopData] = useState([]); //ショップリスト
-  const [genreName, setGenreName] = useState("全てのジャンル"); //ジャンル名
-  const [totalPages, setTotalPages] = useState(1); //ページネーションの総数
-  const [isPagination, setIsPagination] = useState(true); //ページネーションの有無
-  const [isLoad, setIsLoad] = useState(true); //ロード用
-  const [isLikePopUp, setIsLikePopUp] = useState(false); //ポップアップ用
-  const [popUpText, setPopUpText] = useState(""); //ポップアップテキスト
+type Props = {
+  prefecture: [];
+  genres: [];
+};
 
-  const router = useRouter();
-  const { query, asPath } = router;
-  const currentPage = query.page || 1;
-  const urlWithoutQuery = asPath.split("?")[0];
-
-  const { currentUser } = useAuthContext(); //ログイン状態
-
-  //sp サイドメニューの表示切り替え
-  const [sideIn, setSideIn] = useState<string | null>(null);
-  const sideNavIn = () => {
-    if (!sideIn) {
-      setSideIn("left-[0]");
-    } else {
-      setSideIn(null);
-    }
-  };
-
-  const firstGetShop = async () => {
-    try {
-      setIsLoad(true);
-      setShopData([]);
-      setSearchNum(null);
-      const res = await axios.get("/api/getShopLists", {
-        params: {
-          place: "all",
-          startNum: currentPage,
-        },
-      });
-      setShopData(res.data.shop);
-      setSearchNum(res.data.results_available);
-      setTotalPages(Math.ceil(res.data.results_available / 10));
-      setIsLoad(false);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    firstGetShop();
-  }, [router.query]);
-
+export default function Home({ prefecture, genres }: Props) {
   return (
     <>
       <Meta />
 
-      {isLikePopUp && (
-        <div className="fixed w-[100%] top-0 z-30">
-          <Alert variant="filled" severity="success">
-            {popUpText}
-          </Alert>
+      <Header />
+
+      <LayoutMain>
+        <div>
+          <h2>
+            あなただけのお店を
+            <br />
+            簡単に探そう
+          </h2>
+          <p>
+            全国のお店から、
+            <br />
+            あなた合ったお店がすぐ見つかる
+          </p>
+          <SearchArea prefecture={prefecture} genres={genres} />
         </div>
-      )}
-
-      <Header onClick={firstGetShop} currentUser={currentUser} />
-
-      <LayoutWrap>
-        <Sidebar
-          area={"all"}
-          resolvedUrl={"/genre"}
-          setSearchNum={setSearchNum}
-          setShopData={setShopData}
-          sideIn={sideIn}
-          setSideIn={setSideIn}
-          setGenreName={setGenreName}
-          setIsPagination={setIsPagination}
-          setIsLoad={setIsLoad}
-        />
-        <LayoutMain>
-          {/* リードエリア */}
-          <TextArea
-            searchNum={searchNum}
-            genreName={genreName}
-            area={"all"}
-            isLoad={isLoad}
-          />
-
-          {/* 店舗リスト */}
-          <ul>
-            {shopData.map((shop: any) => (
-              <ShopItem
-                key={shop.id}
-                shop={shop}
-                setIsLikePopUp={setIsLikePopUp}
-                setPopUpText={setPopUpText}
-              />
-            ))}
-          </ul>
-
-          {/* ページネーション */}
-          {shopData.length && isPagination ? (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              path={urlWithoutQuery}
-            />
-          ) : (
-            ""
-          )}
-        </LayoutMain>
-      </LayoutWrap>
+      </LayoutMain>
 
       <Footer />
-
-      <FixedButton onClick={sideNavIn} />
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export async function getStaticProps() {
+  //apiURL
+  const apiAreaUrl = process.env.HOTPEPPER_AREA_API;
+  const apiGenreUrl = process.env.HOTPEPPER_GENRE_API;
+  //apiキー
+  const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
+
+  //県ごとにエリアを取得
+  const resArea = await fetch(`${apiAreaUrl}${apiKey}`);
+  const resAreaJson = await resArea.json();
+  const prefecture = resAreaJson.results.large_area;
+
+  //ジャンルを取得
+  const resGenre = await fetch(`${apiGenreUrl}${apiKey}`);
+  const resGenreJson = await resGenre.json();
+  const genres = resGenreJson.results.genre;
+
   return {
-    props: {},
-    revalidate: REVALIDATE_TIME,
+    props: {
+      prefecture,
+      genres,
+    },
   };
-};
+}

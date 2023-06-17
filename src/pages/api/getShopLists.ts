@@ -31,23 +31,21 @@ export default async function handler(
     apiNum = `&start=${num}`;
   }
 
-  //ジャンル
-  let apiGenre = "";
-  if (req.query.genre) {
-    apiGenre = `&genre=${req.query.genre}`;
+  //地域 (初期値:東京)
+  let apiPlace = "";
+  if (req.query.areaCode) {
+    apiPlace = `&large_area=${req.query.areaCode}`;
+  } else {
+    apiPlace = "&large_area=Z011";
   }
 
-  //地域
-  const placeObj = PLACE.find((elem) => {
-    if (req.query.place) {
-      return elem.KEY === req.query.place;
-    } else {
-      return elem.KEY === "all";
-    }
-  });
-  const apiPlace = placeObj && placeObj.POSITION;
+  //ジャンル
+  let apiGenre = "";
+  if (req.query.genreCode) {
+    apiGenre = `&genre=${req.query.genreCode}`;
+  }
 
-  //検索
+  //キーワード
   let apiKeyword = "";
   if (req.query.keyword) {
     apiKeyword = `&keyword=${req.query.keyword}`;
