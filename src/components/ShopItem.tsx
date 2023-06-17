@@ -23,7 +23,7 @@ export const ShopItem = ({
   const onLike = async (shopId: string) => {
     if (currentUser) {
       //ログイン中
-      const res = await axios.post("/api/likeShop", {
+      const res = await axios.post("/api/addLikeShop", {
         currentUserId: currentUser?.uid,
         shopId: shopId,
       });

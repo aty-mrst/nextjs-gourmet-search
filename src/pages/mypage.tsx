@@ -31,6 +31,7 @@ export default function Mypage() {
       const resData = await axios.post("/api/getLikeShopList", {
         currentUserId: currentUser?.uid,
       });
+      console.log(resData);
       setShopData(resData.data.shop);
       setIsLoad(false);
     } catch (error) {

@@ -1,11 +1,7 @@
-import { PLACE } from "@/data/data";
 import axios from "axios";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../lib/firebase";
-
-//表示件数
-export const SHOW_NUM = 10;
 
 /**
  * 飲食店のリストを取得するAPI
@@ -15,25 +11,30 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const currentUserId = req.body.currentUserId; //ユーザーID
-  const usersCollectionRef = collection(db, "user", currentUserId, "like"); //該当ユーザーのlikeコレクション
 
-  let shopIdArray: string[] = [];
-  await getDocs(usersCollectionRef).then((snapshot) => {
-    snapshot.docs.forEach((doc) => {
-      const existShopId = doc.data().shopId;
-      shopIdArray.push(existShopId);
-    });
-  });
+  //店舗idデータを取得
+  const docRef = doc(db, "like", currentUserId);
 
-  //保存済みのshopIdがなければここで返す
-  if (shopIdArray.length < 1) {
+  const docSnap = await getDoc(docRef);
+  const docData = docSnap.data();
+
+  //ドキュメント登録がなければ返す
+  if (!docData) {
+    return res.status(200).json({});
+  }
+
+  const likeShopIdArray = docData && docData.likeShopId;
+
+  //保存済みのshopIdがなければ返す
+  if (likeShopIdArray.length < 1) {
     return res.status(200).json({});
   }
 
   //店舗ID
-  let result = shopIdArray.join(",");
+  let result = likeShopIdArray.join(",");
   const apiShopId = `&id=${result}`;
 
+  //api url
   const apiUrl = process.env.HOTPEPPER_API;
 
   //apiキー
