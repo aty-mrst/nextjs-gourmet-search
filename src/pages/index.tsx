@@ -4,6 +4,7 @@ import { LayoutMain } from "@/components/LayoutMain";
 import { Meta } from "@/components/Meta";
 import { SearchArea } from "@/components/SearchArea";
 import { TopMv } from "@/components/TopMv";
+import useInstallPrompt from "@/components/UseInstallPrompt";
 
 type Props = {
   prefecture: [];
@@ -11,17 +12,27 @@ type Props = {
 };
 
 export default function Home({ prefecture, genres }: Props) {
+  const [isInstallable, acceptPrompt] = useInstallPrompt();
+
+  console.log("isInstallable", isInstallable);
+  console.log("acceptPrompt", acceptPrompt);
+
   return (
     <>
       <Meta />
 
-      
       <Header />
       <TopMv prefecture={prefecture} genres={genres} />
 
       {/* <LayoutMain></LayoutMain> */}
 
       <Footer />
+
+      {isInstallable && (
+        <button onClick={acceptPrompt} className="fixed bottom-10 z-50 left-5">
+          Install App
+        </button>
+      )}
     </>
   );
 }
