@@ -29,8 +29,11 @@ export default function Home({ prefecture, genres }: Props) {
       <Footer />
 
       {isInstallable && (
-        <button onClick={acceptPrompt} className="fixed bottom-10 z-50 left-5">
-          Install App
+        <button
+          onClick={acceptPrompt}
+          className="fixed w-[280px] bottom-16 z-50 left-[50%] translate-x-[-50%] border border-[#017D01] text-[#017D01] bg-white px-5 py-2 rounded"
+        >
+          アプリ版をインストール
         </button>
       )}
     </>
