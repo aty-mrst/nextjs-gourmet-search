@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: AuthType) => {
     <AuthContext.Provider value={value}>
       {loading ? (
         <div className="w-[100%] h-[100vh] flex items-center justify-center">
-          <CircularProgress />
+          <CircularProgress color="success" />
         </div>
       ) : (
         children

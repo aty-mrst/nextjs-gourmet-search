@@ -25,19 +25,11 @@ export default function Login() {
   }, []);
 
   /**
-   * ローカルストレージに店舗IDがあれば取得してfirestoreへ保存する
-   */
-  const addLocalShopId = () => {
-    console.log("ローカルストレージの店舗IDをfirestoreへ保存する");
-  };
-
-  /**
    * Googleアカウントでログイン
    */
   const onGoogleLogin = async (e: any) => {
     e.preventDefault();
     await signInWithRedirect(auth, provider);
-    addLocalShopId();
   };
 
   /**
@@ -126,7 +118,7 @@ export default function Login() {
                   type="email"
                   required
                   value={email}
-                  placeholder="Email"
+                  placeholder="メールアドレス"
                   onChange={(e) => setEmail(e.target.value)}
                   className="border-[3px] border-[#333] w-[100%] rounded-md px-3 h-[50px]"
                 />
@@ -136,7 +128,7 @@ export default function Login() {
                   type="password"
                   required
                   value={password}
-                  placeholder="Password"
+                  placeholder="パスワード"
                   onChange={(e) => setPassword(e.target.value)}
                   className="border-[3px] border-[#333] w-[100%] rounded-md px-3 h-[50px]"
                 />
