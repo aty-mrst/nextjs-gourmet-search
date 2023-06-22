@@ -1,3 +1,4 @@
+import { STATION_AREA } from "@/data/data";
 import axios from "axios";
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -31,11 +32,25 @@ export default async function handler(
   }
 
   //地域 (初期値:東京)
+  console.log(req.query.areaCode);
+
   let apiPlace = "";
   if (req.query.areaCode) {
     apiPlace = `&large_area=${req.query.areaCode}`;
-  } else {
-    apiPlace = "&large_area=Z011";
+  }
+
+  //駅
+  let apiStation = "";
+  if (
+    typeof req.query.stationPos === "string" &&
+    typeof req.query.stationPre === "string"
+  ) {
+    const stationObj: any = STATION_AREA[req.query.stationPre].find(
+      (station: any) => {
+        return station.NAME === req.query.stationPos;
+      }
+    );
+    apiStation = stationObj.PLACE;
   }
 
   //ジャンル
@@ -51,8 +66,12 @@ export default async function handler(
   }
 
   try {
+    console.log(
+      `${apiPlace}${apiStation}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=3`
+    );
+
     const resData = await axios.get(
-      `${apiUrl}${apiKey}${apiPlace}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=3`
+      `${apiUrl}${apiKey}${apiPlace}${apiStation}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=3`
     );
     const shopLists = resData.data.results;
 

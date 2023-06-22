@@ -31,7 +31,9 @@ export default function Search({ prefecture, genres }: Props) {
   const { query, asPath } = router;
   const currentPage = query.page || 1; //現在のページ
 
-  const areaCode = query.area; //パラメータ エリアコード
+  const areaCode = query.area; //パラメータ 県コード
+  const stationPre = query.pre; //パラメータ 県名
+  const stationPos = query.station; //パラメータ 駅名
   const genreCode = query.genre; //パラメータ ジャンルコード
   const keyword = query.keyword; //パラメータ キーワード
 
@@ -66,6 +68,8 @@ export default function Search({ prefecture, genres }: Props) {
         params: {
           startNum: currentPage,
           areaCode,
+          stationPre,
+          stationPos,
           genreCode,
           keyword,
         },

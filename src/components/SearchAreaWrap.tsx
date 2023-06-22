@@ -35,9 +35,7 @@ export const SearchAreaWrap = ({ children }: SearchAreaWrapType) => {
         isStickyShow ? "translate-y-[0]" : "translate-y-[-160px]"
       }`}
     >
-      <div className="max-w-[400px] lg:max-w-[600px] lg:w-[600px]">
-        {children}
-      </div>
+      <div className="max-w-[400px] lg:max-w-[700px]">{children}</div>
     </div>
   );
 };

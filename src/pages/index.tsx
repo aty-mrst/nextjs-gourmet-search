@@ -14,14 +14,12 @@ type Props = {
 export default function Home({ prefecture, genres }: Props) {
   const [isInstallable, acceptPrompt] = useInstallPrompt();
 
-  console.log("isInstallable", isInstallable);
-  console.log("acceptPrompt", acceptPrompt);
-
   return (
     <>
       <Meta />
 
       <Header />
+
       <TopMv prefecture={prefecture} genres={genres} />
 
       {/* <LayoutMain></LayoutMain> */}

@@ -49,14 +49,14 @@ export default function Signup() {
                 type="email"
                 required
                 value={email}
-                placeholder="Email"
+                placeholder="メールアドレス"
                 onChange={(e) => setEmail(e.target.value)}
                 className="border-[3px] border-[#333] w-[100%] rounded-md px-3 h-[50px]"
               />
             </div>
             <div className="mt-4">
               <input
-                type="password"
+                type="パスワード"
                 required
                 value={password}
                 placeholder="Password"
