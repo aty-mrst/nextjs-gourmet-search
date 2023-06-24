@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Alert, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Meta } from "@/components/Meta";
 
 export default function Mypage() {
   const router = useRouter();
@@ -59,6 +60,8 @@ export default function Mypage() {
 
   return (
     <>
+      <Meta title="マイページ" />
+
       <Header />
 
       <div className="mt-[100px] lg:mt-[120px] mb-20 max-w-[800px] mx-auto px-[15px]">

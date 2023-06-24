@@ -1,5 +1,4 @@
 import { STATION_AREA } from "@/data/data";
-import { query } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 

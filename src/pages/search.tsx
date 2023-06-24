@@ -96,7 +96,7 @@ export default function Search({ prefecture, genres }: Props) {
 
   return (
     <>
-      <Meta />
+      <Meta title="お店を探す" />
 
       <Header />
 

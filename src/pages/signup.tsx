@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { auth } from "../../lib/firebase";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
+import { Meta } from "@/components/Meta";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,7 @@ export default function Signup() {
           router.push("/");
         })
         .catch((error) => {
+          alert("メールアドレスとパスワードを再度ご確認下さい。");
           console.log(error);
         });
     } catch (error) {
@@ -37,6 +39,8 @@ export default function Signup() {
 
   return (
     <>
+      <Meta title="新規登録" />
+
       <Header />
 
       <main className="mt-[150px] px-[15px] w-[350px] max-[100%] mx-auto">
@@ -59,7 +63,7 @@ export default function Signup() {
                 type="パスワード"
                 required
                 value={password}
-                placeholder="Password"
+                placeholder="パスワード"
                 onChange={(e) => setPassword(e.target.value)}
                 className="border-[3px] border-[#333] w-[100%] rounded-md px-3 h-[50px]"
               />

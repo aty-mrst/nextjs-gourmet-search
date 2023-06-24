@@ -11,6 +11,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import GoogleIcon from "@mui/icons-material/Google";
+import { Meta } from "@/components/Meta";
 
 export default function Login() {
   const router = useRouter();
@@ -91,6 +92,8 @@ export default function Login() {
 
   return (
     <>
+      <Meta title="ログイン" />
+
       <Header />
 
       <main className="mt-[150px] px-[15px] w-[350px] max-[100%] mx-auto">

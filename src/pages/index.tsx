@@ -2,7 +2,6 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { LayoutMain } from "@/components/LayoutMain";
 import { Meta } from "@/components/Meta";
-import { SearchArea } from "@/components/SearchArea";
 import { TopMv } from "@/components/TopMv";
 import useInstallPrompt from "@/components/UseInstallPrompt";
 
