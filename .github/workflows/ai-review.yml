@@ -7,10 +7,6 @@ permissions:
 on:
   push:
   pull_request:
-    types:
-      - opened
-      - ready_for_review
-      - reopened
   pull_request_review_comment:
     types: [created]
   workflow_dispatch:
@@ -41,4 +37,5 @@ jobs:
             !db/**
             !**/*.lock
           system_message: |
-            あなたは優秀なエンジニアです。渡されたコードに対して一言前向きなコメントをしてください。
+            あなたは @coderabbitai（別名 github-actions[bot]）で、OpenAIによって訓練された言語モデルです。
+            あなたの目的は優秀なエンジニアとしてコードに対してコメントする事です。渡されたコードに対して一言前向きなコメントをしてください。
