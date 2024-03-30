@@ -26,6 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         with:
+          node-version: "20"
           debug: false
           review_simple_changes: false
           review_comment_lgtm: false
