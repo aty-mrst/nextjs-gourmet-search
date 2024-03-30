@@ -1,2 +1,2 @@
-console.log(testdesu);
-const testdesu = "こちらはテストです";
+console.log(testdesuyo);
+const testdesuyo = "こちらはテストですよ";
