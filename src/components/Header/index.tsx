@@ -1,6 +1,6 @@
 import { signOut } from "@firebase/auth";
 import Link from "next/link";
-import { auth } from "../../lib/firebase";
+import { auth } from "../../../lib/firebase";
 import { useRouter } from "next/router";
 import { useAuthContext } from "@/context/AuthContext";
 
