@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`header render correctly 1`] = `
+<div>
+  <header
+    class="text-center border-b  fixed w-[100%] top-0 bg-white z-20"
+  >
+    <div
+      class="flex justify-between items-center px-4 lg:px-6"
+    >
+      <h1
+        class="inline-block py-3"
+      >
+        <a
+          class="text-md font-bold"
+          href="/"
+        >
+          <span
+            class="text-[#017D01] text-xl"
+          >
+            グルメ検索
+          </span>
+          アプリ
+        </a>
+      </h1>
+      <div
+        class="flex gap-4"
+      />
+    </div>
+  </header>
+</div>
+`;

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LayoutMain render correctly 1`] = `
+<div>
+  <main
+    class="max-w-[1000px] mx-auto mt-[80px]  mb-[100px]"
+  >
+    ああ
+  </main>
+</div>
+`;
+
+exports[`header render correctly 1`] = `
+<div>
+  <main
+    class="max-w-[1000px] mx-auto mt-[80px]  mb-[100px]"
+  />
+</div>
+`;
