@@ -1,142 +1,22 @@
-import { STATION_AREA } from "@/data/data";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useSearchSetting } from "./useSearchSetting";
+import { SearchAreaProps } from "./index.type";
 
-type Props = {
-  prefecture?: [];
-  genres?: [];
-};
-
-export const SearchArea = ({ prefecture = [], genres = [] }: Props) => {
+export const SearchArea = ({ prefecture, genres }: SearchAreaProps) => {
   const router = useRouter();
 
-  //エリアコード
-  const [selectedAreaCode, setSelectedAreaCode] = useState(
-    router.query.area || "Z011"
-  );
-  //エリア名(初期値:東京)
-  const [selectedAreaName, setSelectedAreaName] = useState<any>("東京");
-
-  //ジャンルコード(初期値:全てのジャンル)
-  const [selectedGenreCode, setSelectedGenreCode] = useState(
-    router.query.genre || null
-  );
-  //ジャンル名(初期値:全てのジャンル)
-  const [selectedGenreName, setSelectedGenreName] = useState("全てのジャンル");
-
-  //キーワード入力テキスト
-  const [searchText, setSearchText] = useState(router.query.keyword || "");
-
-  //県名
-  const [prefectureName, setPrefectureName] = useState<any>(
-    router.query.pre || "東京"
-  );
-
-  //駅名
-  const [stationName, setStationName] = useState("");
-
-  useEffect(() => {
-    firstPrefectureDisplay();
-    firstGenreDisplay();
-  }, []);
-
-  /**
-   * エリアのselectボックスの初期値を指定
-   */
-  const firstPrefectureDisplay = async () => {
-    if (router.query.area) {
-      const currentAreaObj: any = prefecture.filter((area: any) => {
-        return area.code === selectedAreaCode;
-      });
-      setSelectedAreaName(currentAreaObj[0].name);
-    } else {
-      setSelectedAreaName(router.query.pre);
-    }
-  };
-
-  /**
-   * ジャンルのselectボックスの初期値を指定
-   */
-  const firstGenreDisplay = async () => {
-    if (selectedGenreCode) {
-      const currentGenreObj: any = genres.filter((genre: any) => {
-        return genre.code === selectedGenreCode;
-      });
-      setSelectedGenreName(currentGenreObj[0].name);
-    }
-  };
-
-  //駅の配列を取得
-  const stationArray = STATION_AREA[prefectureName].map((area: any) => {
-    return area.NAME;
-  });
-
-  /**
-   * 選択中のエリアのコードを取得
-   */
-  const handleAreaChange = (e: any) => {
-    setSelectedAreaCode(e.target.value);
-
-    const selectedPrefecture =
-      e.target.options[e.target.selectedIndex].dataset.prefecture;
-    setPrefectureName(selectedPrefecture);
-    setStationName(""); // 都道府県が変わった時に駅の選択をリセット
-  };
-
-  /**
-   * 駅のselectボックスの変更時発火
-   */
-  const handleStationChange = (event: any) => {
-    setStationName(event.target.value);
-  };
-
-  /**
-   * 選択中のジャンルのコードを取得
-   */
-  const handleGenreChange = (e: any) => {
-    setSelectedGenreCode(e.target.value);
-  };
-
-  /**
-   * キーワード入力を取得
-   */
-  const handleSearchInput = (e: any) => {
-    setSearchText(e.target.value);
-  };
-
-  /**
-   * 検索ボタン
-   */
-  const handleSearch = () => {
-    //県
-    let resultPrefectureCode = "";
-
-    //駅
-    let resultStationName = "";
-    let resultPreName = "";
-    if (stationName !== "") {
-      resultStationName = `&station=${stationName}`;
-      resultPreName = `?pre=${prefectureName}`;
-    } else {
-      resultPrefectureCode = `?area=${selectedAreaCode}`;
-    }
-
-    //ジャンル
-    let resultGenreCode = "";
-    if (selectedGenreCode) {
-      resultGenreCode = `&genre=${selectedGenreCode}`;
-    }
-
-    //キーワード
-    let resultKeyword = "";
-    if (searchText !== "") {
-      resultKeyword = `&keyword=${searchText}`;
-    }
-
-    router.push(
-      `/search${resultPrefectureCode}${resultPreName}${resultStationName}${resultGenreCode}${resultKeyword}`
-    );
-  };
+  const {
+    handleAreaChange,
+    handleStationChange,
+    handleGenreChange,
+    handleSearchInput,
+    handleSearch,
+    selectedAreaName,
+    prefectureName,
+    selectedGenreName,
+    stationArray,
+    searchText,
+  } = useSearchSetting({ prefecture, genres });
 
   return (
     <div className="flex flex-wrap lg:flex-nowrap justify-between lg:justify-start">

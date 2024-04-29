@@ -1,33 +1,16 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { SearchAreaWrapProps } from "./index.type";
+import { useSearchPositionSet } from "./useSearchPositionSet";
 
-type SearchAreaWrapType = {
-  children: ReactNode;
-};
-
-export const SearchAreaWrap = ({ children }: SearchAreaWrapType) => {
-  const [isStickyShow, setIsStickyShow] = useState(true);
-
-  /**
-   * 検索エリアのスクロールに応じた位置調整
-   */
-  let set_position = 0;
-  const handleSticky = () => {
-    if (set_position < document.documentElement.scrollTop) {
-      window.scrollY > 200 ? setIsStickyShow(false) : setIsStickyShow(true);
-      console.log(`down`);
-    } else {
-      setIsStickyShow(true);
-      console.log(`up`);
-    }
-    set_position = document.documentElement.scrollTop;
-  };
+export const SearchAreaWrap = ({ children }: SearchAreaWrapProps) => {
+  const { isStickyShow, handleSticky } = useSearchPositionSet();
 
   useEffect(() => {
     window.addEventListener("scroll", handleSticky);
     return () => {
       window.removeEventListener("scroll", handleSticky);
     };
-  }, []);
+  }, [handleSticky]);
 
   return (
     <div
