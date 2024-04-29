@@ -1,4 +1,4 @@
-import { SearchArea } from "./SearchArea";
+import { SearchArea } from "../SearchArea";
 
 type TopMvType = {
   prefecture: [];
