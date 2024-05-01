@@ -1,18 +1,12 @@
 import { CircularProgress } from "@mui/material";
-
-type TextAreaType = {
-  isLoad?: boolean;
-  searchNum: number | null;
-  totalPages: number;
-  currentPage: any;
-};
+import { TextAreaProps } from "./index.type";
 
 export const TextArea = ({
   isLoad,
   searchNum,
   totalPages,
   currentPage,
-}: TextAreaType) => {
+}: TextAreaProps) => {
   return (
     <div className="px-5 max-w-[768px] mx-auto">
       {isLoad ? (

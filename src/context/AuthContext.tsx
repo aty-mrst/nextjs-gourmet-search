@@ -9,7 +9,7 @@ import {
 import { auth } from "../../lib/firebase";
 import { CircularProgress } from "@mui/material";
 
-type AuthContextProps = {
+export type AuthContextProps = {
   currentUser: User | null | undefined;
 };
 

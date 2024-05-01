@@ -1,11 +1,7 @@
 import { SearchArea } from "../SearchArea";
+import { TopMvProps } from "./index.type";
 
-type TopMvType = {
-  prefecture: [];
-  genres: [];
-};
-
-export const TopMv = ({ prefecture, genres }: TopMvType) => {
+export const TopMv = ({ prefecture, genres }: TopMvProps) => {
   return (
     <div className="bg-[url('/image/mv_top_pc.jpg')] bg-cover h-[100vh] flex items-center justify-center px-3">
       <div className="bg-white/[.9] rounded-lg px-5 lg:px-10 py-10">

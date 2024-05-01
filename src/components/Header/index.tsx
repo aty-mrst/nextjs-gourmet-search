@@ -1,23 +1,10 @@
-import { signOut } from "@firebase/auth";
 import Link from "next/link";
-import { auth } from "../../../lib/firebase";
-import { useRouter } from "next/router";
 import { useAuthContext } from "@/context/AuthContext";
+import { useLogout } from "./useLogout";
 
 export const Header = () => {
-  const router = useRouter();
-
-  const { currentUser } = useAuthContext(); //ログイン状態
-
-  /**
-   * ログアウト
-   */
-  const onLogout = async () => {
-    const isConfirm = confirm("ログアウトしますか？");
-    if (!isConfirm) return;
-    await signOut(auth);
-    router.push("/login");
-  };
+  const { currentUser } = useAuthContext();
+  const { onLogout } = useLogout();
 
   return (
     <header className="text-center border-b  fixed w-[100%] top-0 bg-white z-20">

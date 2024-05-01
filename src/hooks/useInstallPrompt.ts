@@ -4,25 +4,23 @@ interface PromptEvent extends Event {
   prompt: () => void;
 }
 
-const useInstallPrompt = (): [boolean, () => void] => {
-  const [isShown, setIsShown] = useState(false);
+export const useInstallPrompt = () => {
+  const [isPwaInstallable, setIsPwaInstallable] = useState<boolean>(false);
   const [prompt, setPrompt] = useState<PromptEvent | null>(null);
 
   //ユーザーがPWAをインストールできる条件を満たした時に発火
   const handlePrompt = useCallback((e: PromptEvent) => {
-    console.log("handlePromptの発火");
     e.preventDefault();
-    setIsShown(true);
+    setIsPwaInstallable(true);
     setPrompt(e);
   }, []);
 
   //ユーザーがボタンを押した時に発火
   const acceptPrompt = () => {
-    console.log("acceptPromptの発火", acceptPrompt);
-    if (isShown && prompt) {
+    if (isPwaInstallable && prompt) {
       prompt.prompt();
     }
-    setIsShown(false);
+    setIsPwaInstallable(false);
   };
 
   useEffect(() => {
@@ -31,7 +29,8 @@ const useInstallPrompt = (): [boolean, () => void] => {
       window.removeEventListener("beforeinstallprompt", handlePrompt as any);
   }, [handlePrompt]);
 
-  return [isShown, acceptPrompt];
+  return {
+    isPwaInstallable,
+    acceptPrompt,
+  };
 };
-
-export default useInstallPrompt;

@@ -1,94 +1,18 @@
 import { Header } from "@/components/Header";
-import {
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signInWithRedirect,
-} from "@firebase/auth";
-import { auth, db, provider } from "../../lib/firebase";
-import { useRouter } from "next/router";
-import { useAuthContext } from "@/context/AuthContext";
-import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Meta } from "@/components/Meta";
+import { useLogin } from "@/hooks/useLogin";
+import { useState } from "react";
 
 export default function Login() {
-  const router = useRouter();
-  const { currentUser } = useAuthContext(); //ログイン状態
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      user && router.push("/");
-    });
-  }, []);
-
-  /**
-   * Googleアカウントでログイン
-   */
-  const onGoogleLogin = async (e: any) => {
-    e.preventDefault();
-    await signInWithRedirect(auth, provider);
-  };
-
-  /**
-   * メールアドレスのログイン
-   */
-  const onEmailLogin = async (e: any) => {
-    e.preventDefault();
-    try {
-      signInWithEmailAndPassword(auth, email, password)
-        .then(async (userCredential) => {
-          const user = userCredential.user;
-
-          const docRef = doc(db, "user", user.uid);
-          const docSnap = await getDoc(docRef);
-          if (!docSnap.exists()) {
-            await setDoc(doc(db, "user", user.uid), {});
-          }
-          router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("ログインに失敗しました");
-        });
-    } catch {
-      alert("ログインエラーが起きました");
-    }
-  };
-
-  /**
-   * ゲスト用ののログイン
-   */
-  const onGuestLogin = async (e: any) => {
-    // setIsAllLoad(true);
-    try {
-      signInWithEmailAndPassword(
-        auth,
-        process.env.NEXT_PUBLIC_GUEST_EMAIL!,
-        process.env.NEXT_PUBLIC_GUEST_PASSWORD!
-      )
-        .then(async (userCredential) => {
-          const user = userCredential.user;
-
-          const docRef = doc(db, "user", user.uid);
-          const docSnap = await getDoc(docRef);
-          if (!docSnap.exists()) {
-            await setDoc(doc(db, "user", user.uid), {});
-          }
-          // setIsAllLoad(false);
-          router.push("/");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("ログインに失敗しました");
-        });
-    } catch {
-      alert("ログインエラーが起きました");
-    }
-  };
+  const { onGoogleLogin, onEmailLogin, onGuestLogin } = useLogin({
+    email,
+    password,
+  });
 
   return (
     <>
@@ -100,7 +24,7 @@ export default function Login() {
         <h1 className="text-center font-bold text-lg lg:text-lg">ログイン</h1>
 
         <div className="mt-4">
-          {/* Googleでログイン */}
+          {/* Google login */}
           <div>
             <button
               onClick={onGoogleLogin}
@@ -113,7 +37,7 @@ export default function Login() {
 
           <p className="py-3 text-center">or</p>
 
-          {/* メールアドレスでログイン */}
+          {/* mail address login */}
           <div className="">
             <form onSubmit={onEmailLogin}>
               <div>
@@ -151,7 +75,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* ゲスト用ログイン */}
+          {/* guest login */}
           <div className="text-center mt-8">
             <button onClick={onGuestLogin} className="underline">
               ゲスト用ログイン

@@ -1,10 +1,6 @@
-import { ReactNode } from "react";
+import { LayoutMainProps } from "./index.type";
 
-type LayoutMainType = {
-  children: ReactNode;
-};
-
-export const LayoutMain = ({ children }: LayoutMainType) => {
+export const LayoutMain = ({ children }: LayoutMainProps) => {
   return (
     <main className="max-w-[1000px] mx-auto mt-[80px]  mb-[100px]">
       {children}

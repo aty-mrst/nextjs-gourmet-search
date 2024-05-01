@@ -1,11 +1,7 @@
 import Head from "next/head";
+import { MetaProps } from "./index.type";
 
-type MetaType = {
-  title?: string;
-  description?: string;
-};
-
-export const Meta = ({ title, description }: MetaType) => {
+export const Meta = ({ title, description }: MetaProps) => {
   const metaTitle = title ? `${title} | グルメ検索アプリ` : "グルメ検索アプリ";
 
   const metaDesc = description

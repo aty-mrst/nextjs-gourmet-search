@@ -8,36 +8,36 @@ import { SearchAreaWrap } from "@/components/SearchAreaWrap";
 import { ShopItem } from "@/components/ShopItem";
 import { TextArea } from "@/components/TextArea";
 import { useAuthContext } from "@/context/AuthContext";
+import { useGetUrlParam } from "@/hooks/useGetUrlParam";
 import { Alert } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-type Props = {
+type SearchProps = {
   prefecture: [];
   genres: [];
 };
 
-export default function Search({ prefecture, genres }: Props) {
+export default function Search({ prefecture, genres }: SearchProps) {
+  const { currentUser } = useAuthContext();
+
   const [searchNum, setSearchNum] = useState(null); //ショップ数
   const [shopData, setShopData] = useState([]); //ショップリスト
   const [totalPages, setTotalPages] = useState(1); //ページネーションの総数
   const [isLoad, setIsLoad] = useState(true); //ロード用
   const [isLikePopUp, setIsLikePopUp] = useState(false); //ポップアップ用
   const [popUpText, setPopUpText] = useState(""); //ポップアップテキスト
+  
   const [likeShopId, setLikeShopId] = useState([]); //いいね保存済みの店舗ID
 
   const router = useRouter();
   const { query, asPath } = router;
-  const currentPage = query.page || 1; //現在のページ
 
-  const areaCode = query.area; //パラメータ 県コード
-  const stationPre = query.pre; //パラメータ 県名
-  const stationPos = query.station; //パラメータ 駅名
-  const genreCode = query.genre; //パラメータ ジャンルコード
-  const keyword = query.keyword; //パラメータ キーワード
+  const { areaCode, prefectureName, stationName, genreCode, keyword } =
+    useGetUrlParam(query);
 
-  const { currentUser } = useAuthContext(); //ログイン状態
+  const currentPage = query.page || 1;
 
   const getLikeShopId = async () => {
     //ログイン状態のみで実行する
@@ -68,8 +68,8 @@ export default function Search({ prefecture, genres }: Props) {
         params: {
           startNum: currentPage,
           areaCode,
-          stationPre,
-          stationPos,
+          prefectureName,
+          stationName,
           genreCode,
           keyword,
         },
@@ -100,13 +100,13 @@ export default function Search({ prefecture, genres }: Props) {
 
       <Header />
 
-      {/* 検索エリア */}
+      {/* search area */}
       <SearchAreaWrap>
         <SearchArea prefecture={prefecture} genres={genres} />
       </SearchAreaWrap>
 
       <LayoutMain>
-        {/* リードエリア */}
+        {/* lead area */}
         <TextArea
           isLoad={isLoad}
           searchNum={searchNum}
@@ -114,7 +114,7 @@ export default function Search({ prefecture, genres }: Props) {
           currentPage={currentPage}
         />
 
-        {/* 店舗リスト */}
+        {/* shop list */}
         <ul className="px-5 max-w-[768px] mx-auto">
           {shopData.map((shop: any) => {
             likeShopId.map((id) => {
@@ -134,7 +134,7 @@ export default function Search({ prefecture, genres }: Props) {
           })}
         </ul>
 
-        {/* ページネーション */}
+        {/* pagination */}
         {shopData.length ? (
           <Pagination
             currentPage={currentPage}
@@ -146,7 +146,7 @@ export default function Search({ prefecture, genres }: Props) {
         )}
       </LayoutMain>
 
-      {/* いいねのポップアップ */}
+      {/* like popup */}
       <div
         className={`fixed w-[95%] left-[50%] translate-x-[-50%] bottom-3 z-30 ease-in-out duration-200 ${
           isLikePopUp ? "translate-y-[0]" : "translate-y-[150%]"
@@ -163,18 +163,16 @@ export default function Search({ prefecture, genres }: Props) {
 }
 
 export async function getStaticProps() {
-  //apiURL
   const apiAreaUrl = process.env.HOTPEPPER_AREA_API;
   const apiGenreUrl = process.env.HOTPEPPER_GENRE_API;
-  //apiキー
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
-  //県ごとにエリアを取得
+  // prefecture
   const resArea = await fetch(`${apiAreaUrl}${apiKey}`);
   const resAreaJson = await resArea.json();
   const prefecture = resAreaJson.results.large_area;
 
-  //ジャンルを取得
+  // genre
   const resGenre = await fetch(`${apiGenreUrl}${apiKey}`);
   const resGenreJson = await resGenre.json();
   const genres = resGenreJson.results.genre;

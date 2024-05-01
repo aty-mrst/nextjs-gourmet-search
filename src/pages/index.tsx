@@ -1,17 +1,16 @@
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { LayoutMain } from "@/components/LayoutMain";
 import { Meta } from "@/components/Meta";
 import { TopMv } from "@/components/TopMv";
-import useInstallPrompt from "@/components/UseInstallPrompt";
+import { useInstallPrompt } from "@/hooks/useInstallPrompt";
 
-type Props = {
+type HomeProps = {
   prefecture: [];
   genres: [];
 };
 
-export default function Home({ prefecture, genres }: Props) {
-  const [isInstallable, acceptPrompt] = useInstallPrompt();
+export default function Home({ prefecture, genres }: HomeProps) {
+  const { isPwaInstallable, acceptPrompt } = useInstallPrompt();
 
   return (
     <>
@@ -21,11 +20,9 @@ export default function Home({ prefecture, genres }: Props) {
 
       <TopMv prefecture={prefecture} genres={genres} />
 
-      {/* <LayoutMain></LayoutMain> */}
-
       <Footer />
 
-      {isInstallable && (
+      {isPwaInstallable && (
         <button
           onClick={acceptPrompt}
           className="fixed w-[280px] bottom-16 z-50 left-[50%] translate-x-[-50%] border border-[#017D01] text-[#017D01] bg-white px-5 py-2 rounded"
@@ -38,18 +35,16 @@ export default function Home({ prefecture, genres }: Props) {
 }
 
 export async function getStaticProps() {
-  //apiURL
   const apiAreaUrl = process.env.HOTPEPPER_AREA_API;
   const apiGenreUrl = process.env.HOTPEPPER_GENRE_API;
-  //apiキー
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
-  //県ごとにエリアを取得
+  // prefecture
   const resArea = await fetch(`${apiAreaUrl}${apiKey}`);
   const resAreaJson = await resArea.json();
   const prefecture = resAreaJson.results.large_area;
 
-  //ジャンルを取得
+  // genre
   const resGenre = await fetch(`${apiGenreUrl}${apiKey}`);
   const resGenreJson = await resGenre.json();
   const genres = resGenreJson.results.genre;

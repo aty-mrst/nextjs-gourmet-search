@@ -4,59 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
-import { useRouter } from "next/router";
-
-type ShopItemType = {
-  shop: any;
-  setIsLikePopUp: any;
-  setPopUpText: any;
-  isLiked: boolean;
-};
+import { ShopItemProps } from "./index.type";
+import { useShopLike } from "./useShopLike";
 
 export const ShopItem = ({
   shop,
   setIsLikePopUp,
   setPopUpText,
   isLiked,
-}: ShopItemType) => {
-  const { currentUser } = useAuthContext(); //ログイン状態
+}: ShopItemProps) => {
+  const { currentUser } = useAuthContext();
 
-  const [isLikeHover, setIsLikeHover] = useState(false);
-  const [isClick, setIsClick] = useState(false);
-
-  const router = useRouter();
-
-  /**
-   * いいね登録
-   */
-  const onLike = async (shopId: string) => {
-    if (currentUser) {
-      //ログイン中
-      setIsClick(true);
-      const res = await axios.post("/api/addLikeShop", {
-        currentUserId: currentUser?.uid,
-        shopId: shopId,
-      });
-      setPopUpText(res.data.message.popup);
-      setIsLikePopUp(true);
-      setTimeout(() => {
-        setIsLikePopUp(false);
-      }, 3000);
-    } else {
-      //未ログイン状態
-      console.log("未ログインです！", shopId);
-      router.push("/login");
-    }
-  };
-
-  const onHover = () => {
-    setIsLikeHover(true);
-  };
-
-  const onHoverLeave = () => {
-    setIsLikeHover(false);
-  };
+  const { isLikeHover, isClick, onHover, onHoverLeave, onLike } = useShopLike({
+    currentUser,
+    setIsLikePopUp,
+    setPopUpText,
+  });
 
   return (
     <>

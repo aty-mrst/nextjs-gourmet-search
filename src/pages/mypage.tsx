@@ -9,54 +9,25 @@ import { Alert, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Meta } from "@/components/Meta";
+import { useLikeShop } from "@/hooks/useLikeShop";
 
 export default function Mypage() {
   const router = useRouter();
-  const { currentUser } = useAuthContext(); //ログイン状態
-  const [shopData, setShopData] = useState([]); //ショップリスト
-  const [isLoad, setIsLoad] = useState(false); //ローディング用
-  const [isLikePopUp, setIsLikePopUp] = useState(false); //ポップアップ用
-  const [popUpText, setPopUpText] = useState(""); //ポップアップテキスト
+  const { currentUser } = useAuthContext();
+
+  const {
+    isLoad,
+    shopData,
+    getLikeShop,
+    deleteLikeShop,
+    isLikePopUp,
+    popUpText,
+  } = useLikeShop();
 
   useEffect(() => {
     if (!currentUser) router.push("/");
     getLikeShop();
   }, []);
-
-  /**
-   * いいね済み店舗を取得
-   */
-  const getLikeShop = async () => {
-    try {
-      setIsLoad(true);
-      const resData = await axios.post("/api/getLikeShopList", {
-        currentUserId: currentUser?.uid,
-      });
-      setShopData(resData.data.shop);
-      setIsLoad(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  /**
-   * お気に入りから削除する
-   */
-  const deleteShop = async (shopId: string) => {
-    const isConfirm = confirm("お気に入りから削除してもよろしいですか？");
-    if (!isConfirm) return;
-
-    const res = await axios.post("/api/deleteLikeShopList", {
-      currentUserId: currentUser?.uid,
-      shopId: shopId,
-    });
-    setPopUpText(res.data.message.popup);
-    setIsLikePopUp(true);
-    setTimeout(() => {
-      setIsLikePopUp(false);
-    }, 3000);
-    getLikeShop();
-  };
 
   return (
     <>
@@ -103,7 +74,7 @@ export default function Mypage() {
                       </Link>
                       <div className="text-right mt-4">
                         <button
-                          onClick={() => deleteShop(shop.id)}
+                          onClick={() => deleteLikeShop(shop.id)}
                           className="text-sm"
                         >
                           削除
