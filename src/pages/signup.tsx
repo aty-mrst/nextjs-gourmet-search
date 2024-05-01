@@ -1,41 +1,23 @@
 import { Header } from "@/components/Header";
-import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { auth } from "../../lib/firebase";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
 import { Meta } from "@/components/Meta";
+import { useSignup } from "@/hooks/useSignup";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { onSignUp } = useSignup({ email, password });
+
   const router = useRouter();
   const { currentUser } = useAuthContext(); //ログイン状態
 
   useEffect(() => {
     if (currentUser) router.push("/");
   }, []);
-
-  /**
-   * ユーザー会員登録
-   */
-  const onSingUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("会員登録ができました！");
-          router.push("/");
-        })
-        .catch((error) => {
-          alert("メールアドレスとパスワードを再度ご確認下さい。");
-          console.log(error);
-        });
-    } catch (error) {
-      alert("会員登録に失敗しました。");
-    }
-  };
 
   return (
     <>
@@ -47,7 +29,7 @@ export default function Signup() {
         <h1 className="text-center font-bold text-lg lg:text-lg">新規登録</h1>
 
         <div className="mt-4">
-          <form onSubmit={onSingUp}>
+          <form onSubmit={onSignUp}>
             <div>
               <input
                 type="email"
