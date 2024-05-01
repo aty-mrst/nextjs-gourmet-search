@@ -3,14 +3,11 @@ import { doc, getDoc } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../lib/firebase";
 
-/**
- * 飲食店のリストを取得するAPI
- */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const currentUserId = req.body.currentUserId; //ユーザーID
+  const currentUserId = req.body.currentUserId;
 
   //店舗idデータを取得
   const docRef = doc(db, "like", currentUserId);
@@ -34,10 +31,7 @@ export default async function handler(
   let result = likeShopIdArray.join(",");
   const apiShopId = `&id=${result}`;
 
-  //api url
   const apiUrl = process.env.HOTPEPPER_API;
-
-  //apiキー
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
   try {

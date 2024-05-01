@@ -1,16 +1,20 @@
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import { auth } from "../../lib/firebase";
 import { useRouter } from "next/router";
-import { UseSignupProps } from "./index.type";
 
-export const useSignup = ({ email, password }: UseSignupProps) => {
+type UseSignupProps = {
+  email: string;
+  password: string;
+};
+
+export const useSignUp = ({ email, password }: UseSignupProps) => {
   const router = useRouter();
 
   const onSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(() => {
           alert("会員登録ができました！");
           router.push("/");
         })

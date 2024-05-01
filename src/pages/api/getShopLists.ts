@@ -13,8 +13,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const apiUrl = process.env.HOTPEPPER_API;
-
-  //apiキー
   const apiKey = `&key=${process.env.HOTPEPPER_API_KEY}`;
 
   //表示件数
@@ -32,8 +30,6 @@ export default async function handler(
   }
 
   //地域 (初期値:東京)
-  console.log(req.query.areaCode);
-
   let apiPlace = "";
   if (req.query.areaCode) {
     apiPlace = `&large_area=${req.query.areaCode}`;
@@ -66,10 +62,6 @@ export default async function handler(
   }
 
   try {
-    console.log(
-      `${apiPlace}${apiStation}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=3`
-    );
-
     const resData = await axios.get(
       `${apiUrl}${apiKey}${apiPlace}${apiStation}${apiGenre}${apiKeyword}${apiCount}${apiNum}&range=3`
     );

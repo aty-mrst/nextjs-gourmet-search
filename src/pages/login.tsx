@@ -3,17 +3,16 @@ import Link from "next/link";
 import GoogleIcon from "@mui/icons-material/Google";
 import { Meta } from "@/components/Meta";
 import { useLogin } from "@/hooks/useLogin";
+import { useState } from "react";
 
 export default function Login() {
-  const {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const { onGoogleLogin, onEmailLogin, onGuestLogin } = useLogin({
     email,
-    setEmail,
     password,
-    setPassword,
-    onGoogleLogin,
-    onEmailLogin,
-    onGuestLogin,
-  } = useLogin();
+  });
 
   return (
     <>
@@ -25,7 +24,7 @@ export default function Login() {
         <h1 className="text-center font-bold text-lg lg:text-lg">ログイン</h1>
 
         <div className="mt-4">
-          {/* Googleでログイン */}
+          {/* Google login */}
           <div>
             <button
               onClick={onGoogleLogin}
@@ -38,7 +37,7 @@ export default function Login() {
 
           <p className="py-3 text-center">or</p>
 
-          {/* メールアドレスでログイン */}
+          {/* mail address login */}
           <div className="">
             <form onSubmit={onEmailLogin}>
               <div>
@@ -76,7 +75,7 @@ export default function Login() {
             </div>
           </div>
 
-          {/* ゲスト用ログイン */}
+          {/* guest login */}
           <div className="text-center mt-8">
             <button onClick={onGuestLogin} className="underline">
               ゲスト用ログイン

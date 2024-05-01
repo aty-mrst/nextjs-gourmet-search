@@ -4,25 +4,27 @@ import {
   signInWithRedirect,
 } from "@firebase/auth";
 import { auth, db, provider } from "../../lib/firebase";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 
-export const useLogin = () => {
-  const router = useRouter();
+type UseLoginProps = {
+  email: string;
+  password: string;
+};
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export const useLogin = ({ email, password }: UseLoginProps) => {
+  const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       user && router.push("/");
     });
-  }, []);
+  }, [router]);
 
   const onGoogleLogin = async (e: any) => {
     e.preventDefault();
-    await signInWithRedirect(auth, provider);
+    signInWithRedirect(auth, provider);
   };
 
   const onEmailLogin = async (e: any) => {
@@ -49,7 +51,6 @@ export const useLogin = () => {
   };
 
   const onGuestLogin = async (e: any) => {
-    // setIsAllLoad(true);
     try {
       signInWithEmailAndPassword(
         auth,
@@ -64,7 +65,6 @@ export const useLogin = () => {
           if (!docSnap.exists()) {
             await setDoc(doc(db, "user", user.uid), {});
           }
-          // setIsAllLoad(false);
           router.push("/");
         })
         .catch((error) => {
@@ -77,10 +77,6 @@ export const useLogin = () => {
   };
 
   return {
-    email,
-    setEmail,
-    password,
-    setPassword,
     onGoogleLogin,
     onEmailLogin,
     onGuestLogin,

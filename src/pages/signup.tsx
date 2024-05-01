@@ -4,20 +4,20 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuthContext } from "@/context/AuthContext";
 import { Meta } from "@/components/Meta";
-import { useSignup } from "@/hooks/useSignup";
+import { useSignUp } from "@/hooks/useSignUp";
 
-export default function Signup() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { onSignUp } = useSignup({ email, password });
-
+export default function SignUp() {
   const router = useRouter();
-  const { currentUser } = useAuthContext(); //ログイン状態
+  const { currentUser } = useAuthContext();
+
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const { onSignUp } = useSignUp({ email, password });
 
   useEffect(() => {
     if (currentUser) router.push("/");
-  }, []);
+  }, [currentUser, router]);
 
   return (
     <>
